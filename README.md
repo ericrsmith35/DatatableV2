@@ -2,7 +2,7 @@
 
 Lightning Web Component for Flow Screens:       **datatableV2**
 
-This component allows the user to configure and display a datatable in a Flow screen.
+**This component allows the user to configure and display a datatable in a Flow screen.**
 
 Additional components packaged with this LWC:
 
@@ -11,10 +11,10 @@ Additional components packaged with this LWC:
                     Apex Classes:               SObjectController2 
                                                 SObjectController2Test  
                                                   
-Documentation:  https://unofficialsf.com/datatablev2-lightning-web-component-for-flow-screens/  
+**Documentation:**  https://unofficialsf.com/datatablev2-lightning-web-component-for-flow-screens/  
   
-** Created by:**	Eric Smith  
-** Date:**		March 2020
+**Created by:**	Eric Smith  
+**Date:**		March 2020
   
 LinkedIn: https://www.linkedin.com/in/ericrsmith2  
 Salesforce: https://trailblazer.me/id/ericsmith  
