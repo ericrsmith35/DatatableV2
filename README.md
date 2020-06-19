@@ -1,6 +1,5 @@
 # DatatableV2
 
-
 Lightning Web Component for Flow Screens:       **datatableV2**
 
 This component allows the user to configure and display a datatable in a Flow screen.
@@ -25,11 +24,11 @@ Date:		March 2020
 
 ## Release Notes
 
-06/xx/20 -  Eric Smith -    Version 2.33
-            - Updates:        Removed default value for Table Height                                                
-
-06/03/20 -  Eric Smith -    Version 2.32
-            Bug Fix:        Fixed error when editing more than one column in a single row while suppressing the Cancel/Save buttons
+06/xx/20 |  Eric Smith |    Version 2.33
+         |  Updates:   |    Removed default value for Table Height                                                
+| |
+06/03/20 |  Eric Smith |    Version 2.32
+         |  Bug Fix:   |    Fixed error when editing more than one column in a single row while suppressing the Cancel/Save buttons
 
 06/03/20 -  Eric Smith -    Version 2.31
             Updates:        Changed SObjectController to SObjectController2 to allow for easier deployment to orgs 
@@ -74,6 +73,7 @@ Features:   The only required paramters are the SObject collection of records an
             Unlike the original datatable component, only the edited records will be passed back to the flow
             The maximum number of rows to display can be set by the user
             Optional attribute overrides are supported and can be specified by list, column # or by field name, including:
+
                 - Alignment               
                 - Editable
                 - Header Icon
