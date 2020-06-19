@@ -16,6 +16,9 @@
  *              of the Name fields in the corresponding records. Return the
  *              records that now include both the Id and Name for each lookup.
  * 
+ * 06/19/20 -   Eric Smith -    Version 2.33    Fixed issue with lookup fields being blank in the first record
+ *                                              Renumbered to match datatableV2 versioning
+ * 
  * 06/03/20 -   Eric Smith -    Version 2.0     Renamed to allow for easier installation with datatableV2
  * 
  * 04/28/20 -   Eric Smith -    Version 1.2     Handle lookup Objects without a Name field & 
@@ -179,7 +182,11 @@ public with sharing class SObjectController2 {
     public static ReturnResults getRowData(ReturnResults curRR, List<SObject> records, Map<String, Map<Id, SObject>> dataMap, Map<String, String> objNameFieldMap, List<String> lookupFields, List<String> percentFields, String objName) {
         // Update object to include values for the "Name" field referenced by Lookup fields
         String lookupFieldData = '';
-        Boolean firstRecord = true;
+        Map<String,Boolean> firstRecord = new Map<String,Boolean>();
+        for(String lf : lookupFields) {
+            firstRecord.put(lf,true);
+        }
+
         for(SObject so : records) {   
             
             // Divide percent field values by 100
@@ -207,13 +214,13 @@ public with sharing class SObjectController2 {
                     so.putSObject(relName, cso);
 
                     // Save the Object and "Name" field related to the lookup field
-                    if(firstRecord) {
+                    if(firstRecord.get(lf)) {
                         lookupFieldData = lookupFieldData
                             + ',{ "object" : "' + relObjName
                             + '", "fieldName" : "' + relName
                             + '", "nameField" : "' + objNameFieldMap.get(relObjName)
                             + '"}';
-                        firstRecord = false;
+                        firstRecord.put(lf,false);
                     }
                 }
             }
