@@ -1,26 +1,29 @@
 # DatatableV2
 
 
-Lightning Web Component for Flow Screens:       datatableV2
+Lightning Web Component for Flow Screens:       **datatableV2**
 
 This component allows the user to configure and display a datatable in a Flow screen.
 
 Additional components packaged with this LWC:
 
-                    Lightning Web Components:   
+                    Lightning Web Components:   datatableV2Spring20 (temporary version for hardcoded SObjects)   
 
                     Apex Classes:               SObjectController2 
                                                 SObjectController2Test
 Created by:	Eric Smith
-Date:		May 2020
+Date:		March 2020
 
+---
 
 <a href="https://githubsfdeploy.herokuapp.com">
   <img alt="Deploy to Salesforce"
        src="https://raw.githubusercontent.com/afawcett/githubsfdeploy/master/deploy.png">
 </a>
 
+---
                                                
+## Release Notes
 
 06/xx/20 -  Eric Smith -    Version 2.33
             Updates:        Removed default value for Table Height                                                
