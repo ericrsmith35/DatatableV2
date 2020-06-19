@@ -22,11 +22,11 @@ Date:		March 2020
 </a>
 
 ---
-                                               
+
 ## Release Notes
 
 06/xx/20 -  Eric Smith -    Version 2.33
-            Updates:        Removed default value for Table Height                                                
+            - Updates:        Removed default value for Table Height                                                
 
 06/03/20 -  Eric Smith -    Version 2.32
             Bug Fix:        Fixed error when editing more than one column in a single row while suppressing the Cancel/Save buttons
@@ -74,15 +74,16 @@ Features:   The only required paramters are the SObject collection of records an
             Unlike the original datatable component, only the edited records will be passed back to the flow
             The maximum number of rows to display can be set by the user
             Optional attribute overrides are supported and can be specified by list, column # or by field name, including:
-                Alignment               
-                Editable
-                Header Icon
-                Header Label
-                Initial Column Width
-                Custom Cell Attributes including those with nested values {name: {name:value}}               
-                Custom Type Attributes including those with nested values {name: {name:value}}
-                Other Custom Column Attributes including those with nested values {name: {name:value}}
+                - Alignment               
+                - Editable
+                - Header Icon
+                - Header Label
+                - Initial Column Width
+                - Custom Cell Attributes including those with nested values {name: {name:value}}               
+                - Custom Type Attributes including those with nested values {name: {name:value}}
+                - Other Custom Column Attributes including those with nested values {name: {name:value}}
 
+---
 
 Copyright (c) 2020, Eric Smith
 
