@@ -16,6 +16,9 @@
  *              of the Name fields in the corresponding records. Return the
  *              records that now include both the Id and Name for each lookup.
  * 
+ * 06/19/20 -   Eric Smith -    Version 2.33    Fixed issue with lookup fields being blank in the first record
+ *                                              Renumbered to match datatableV2 versioning
+ * 
  * 06/03/20 -   Eric Smith -    Version 2.0     Renamed to allow for easier installation with datatableV2
  * 
  * 04/28/20 -   Eric Smith -    Version 1.2     Handle lookup Objects without a Name field & 
