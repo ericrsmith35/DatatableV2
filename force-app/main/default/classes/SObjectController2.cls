@@ -179,7 +179,11 @@ public with sharing class SObjectController2 {
     public static ReturnResults getRowData(ReturnResults curRR, List<SObject> records, Map<String, Map<Id, SObject>> dataMap, Map<String, String> objNameFieldMap, List<String> lookupFields, List<String> percentFields, String objName) {
         // Update object to include values for the "Name" field referenced by Lookup fields
         String lookupFieldData = '';
-        Boolean firstRecord = true;
+        Map<String,Boolean> firstRecord = new Map<String,Boolean>();
+        for(String lf : lookupFields) {
+            firstRecord.put(lf,true);
+        }
+
         for(SObject so : records) {   
             
             // Divide percent field values by 100
@@ -207,13 +211,13 @@ public with sharing class SObjectController2 {
                     so.putSObject(relName, cso);
 
                     // Save the Object and "Name" field related to the lookup field
-                    if(firstRecord) {
+                    if(firstRecord.get(lf)) {
                         lookupFieldData = lookupFieldData
                             + ',{ "object" : "' + relObjName
                             + '", "fieldName" : "' + relName
                             + '", "nameField" : "' + objNameFieldMap.get(relObjName)
                             + '"}';
-                        firstRecord = false;
+                        firstRecord.put(lf,false);
                     }
                 }
             }
