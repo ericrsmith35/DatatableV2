@@ -9,9 +9,17 @@ Additional components packaged with this LWC:
                     Lightning Web Components:   datatableV2Spring20 (temporary version for hardcoded SObjects)   
 
                     Apex Classes:               SObjectController2 
-                                                SObjectController2Test
-Created by:	Eric Smith
-Date:		March 2020
+                                                SObjectController2Test  
+                                                  
+Documentation:  https://unofficialsf.com/datatablev2-lightning-web-component-for-flow-screens/  
+  
+** Created by:**	Eric Smith  
+** Date:**		March 2020
+  
+LinkedIn: https://www.linkedin.com/in/ericrsmith2  
+Salesforce: https://trailblazer.me/id/ericsmith  
+Blog: https://ericsplayground.wordpress.com/blog/  
+Twitter: https://twitter.com/esmith35  
 
 ---
 
