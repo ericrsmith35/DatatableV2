@@ -24,44 +24,44 @@ Date:		March 2020
 
 ## Release Notes
 
-| 06/xx/20 |  Eric Smith |    Version 2.33 |
-|        |  Updates:   |    Removed default value for Table Height   |                                             
-| | | |
-| 06/03/20 |  Eric Smith |    Version 2.32 |
-|         |  Bug Fix:   |    Fixed error when editing more than one column in a single row while suppressing the Cancel/Save buttons |
+06/xx/20 -  Eric Smith -    Version 2.33 -
+            Updates:        Removed default value for Table Height                                                
 
-06/03/20 -  Eric Smith -    Version 2.31
+06/03/20 -  Eric Smith -    Version 2.32 -
+            Bug Fix:        Fixed error when editing more than one column in a single row while suppressing the Cancel/Save buttons
+
+06/03/20 -  Eric Smith -    Version 2.31 -
             Updates:        Changed SObjectController to SObjectController2 to allow for easier deployment to orgs 
                             that already have an earlier version of the datatable component    
                                                                                  
-06/03/20 -  Eric Smith -    Version 2.3
+06/03/20 -  Eric Smith -    Version 2.3 -
             Updates:        Changed SObjectController to SObjectController2 to allow for easier deployment to orgs 
                             that already have an earlier version of the datatable component
 
-06/03/20 -  Eric Smith -    Version 2.2 
+06/03/20 -  Eric Smith -    Version 2.2 -
             Enhancements:   Added datatable border attribute
             Updates:        Fixed attribute parsing, Fixed Spinner
 
-06/01/20 -  Eric Smith -    Version 2.1 
+06/01/20 -  Eric Smith -    Version 2.1 -
             Enhancements:   Updated with features from v1.2 & v1.3                                                
 
-04/22/20 -  Eric Smith -    Version 2.0 (Summer '20)
+04/22/20 -  Eric Smith -    Version 2.0 (Summer '20) -
             Enhancements:   Summer '20 New Feature - Dynamic Object Type
                             One version of the component now supports ALL Standard & Custom SObjects
 
-05/23/20 -  Eric Smith -    Version 1.3
+05/23/20 -  Eric Smith -    Version 1.3 -
             Updates:        Added support for a serialized JSON string of records of a user defined object
                             Added an attribute to specify the height of the datatable
                             Bug Fix - Fixed error when editing multiple rows           
 
-05/06/20 -  Eric Smith -    Version 1.2
+05/06/20 -  Eric Smith -    Version 1.2 -
             Updates:        Handle lookup Objects without a Name field & 
                             Trap non-updatable Master/Detail fields
 
-04/14/20 -  Eric Smith -    Version 1.1
+04/14/20 -  Eric Smith -    Version 1.1 -
             Enhancements:   New Column Attribute to support column filtering
 
-04/01/20 -  Eric Smith -    Version 1.0
+04/01/20 -  Eric Smith -    Version 1.0 -
 Features:   The only required paramters are the SObject collection of records and a list of field API names
             The field label and field type will default to what is defined in the object
             Numeric fields will display with the correct number of decimal places as defined in the object
@@ -72,8 +72,7 @@ Features:   The only required paramters are the SObject collection of records an
             Inline editing is supported with changed values passed back to the flow
             Unlike the original datatable component, only the edited records will be passed back to the flow
             The maximum number of rows to display can be set by the user
-            Optional attribute overrides are supported and can be specified by list, column # or by field name, including:
-
+            Optional attribute overrides are supported and can be specified by list, column # or by field name, including:            
                 - Alignment               
                 - Editable
                 - Header Icon
