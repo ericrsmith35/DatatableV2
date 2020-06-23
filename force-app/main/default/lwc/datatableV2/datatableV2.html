@@ -139,9 +139,22 @@ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVE
                 onheaderaction={handleHeaderAction}
                 onrowselection={handleRowSelection}
                 onrowaction={handleRowAction}
+                onresize={handleResize}
             >
             </lightning-datatable>
         </div>
+
+        <template if:true={isConfigMode}>
+            <lightning-card>
+                <h3 slot="title">Copy these values into your datatableV2 parameters.</h3>
+                <lightning-textarea readonly value={columnFields} label="Column Fields:"></lightning-textarea>
+                </br>
+                <lightning-textarea readonly value={columnLabelList} label="Column Labels:"></lightning-textarea>
+                </br>
+                <lightning-textarea readonly value={columnWidthList} label="Column Widths:"></lightning-textarea>
+            </lightning-card>
+        </template>
+
     </template>
 
     <!-- Spinner -->

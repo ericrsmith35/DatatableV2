@@ -51,6 +51,7 @@ export default class DatatableV2 extends LightningElement {
     @api matchCaseOnFilters;
     @api maxNumberOfRows;
     @api preSelectedRows = [];
+    @api isConfigMode;
     @api hideCheckboxColumn;
     @api singleRowSelection;
     @api suppressBottomBar = false;
@@ -134,6 +135,8 @@ export default class DatatableV2 extends LightningElement {
     @api recordData = [];
     @track showSpinner = true;
     @track borderClass;
+    @track columnLabelList;
+    @track columnWidthList;
 
     connectedCallback() {
 
@@ -201,6 +204,9 @@ export default class DatatableV2 extends LightningElement {
         }
 
         // Parse Column Filter attribute
+        if (this.isConfigMode) {
+            this.columnFilters = '';
+        }
         if (this.columnFilters.toLowerCase() != 'all') {
             const parseFilters = (this.columnFilters.length > 0) ? this.columnFilters.replace(/\s/g, '').split(',') : [];
             this.attribCount = (parseFilters.findIndex(f => f.search(':') != -1) != -1) ? 0 : 1;
@@ -241,7 +247,7 @@ export default class DatatableV2 extends LightningElement {
                 label: this.columnValue(label)
             });
         });
-
+   
         if (this.isUserDefinedObject) {
 
             // JSON Version - Parse Column Scale attribute
@@ -287,7 +293,7 @@ export default class DatatableV2 extends LightningElement {
                 attribute: this.columnValue(cellAttrib)
             });
         });
-        
+   
         // Parse Column Other Attributes attribute (Because multiple attributes use , these are separated by ;)
         const parseOtherAttribs = (this.columnOtherAttribs.length > 0) ? this.removeSpaces(this.columnOtherAttribs).split(';') : [];
         this.attribCount = 0;   // These attributes must specify a column number or field API name
@@ -446,13 +452,13 @@ export default class DatatableV2 extends LightningElement {
                 // Done processing the datatable
                 this.showSpinner = false;
 
-            })  // Handle any errors from the Apex Class
-            .catch(error => {
-                console.log('getReturnResults error is: ' + JSON.stringify(error));
-                this.errorApex = 'Apex Action error: ' + error.body.message;
-                alert(this.errorApex + '\n'  + error.body.stackTrace);  // Present the error to the user
-                this.showSpinner = false;
-                return this.errorApex; 
+            // })  // Handle any errors from the Apex Class
+            // .catch(error => {
+            //     console.log('getReturnResults error is: ' + JSON.stringify(error));
+            //     this.errorApex = 'Apex Action error: ' + error.body.message;
+            //     alert(this.errorApex + '\n'  + error.body.stackTrace);  // Present the error to the user
+            //     this.showSpinner = false;
+            //     return this.errorApex; 
             });
 
         }
@@ -577,33 +583,43 @@ export default class DatatableV2 extends LightningElement {
             }
 
             // Update Filter attribute overrides by column
-            switch (this.filterAttribType) {
-                case 'cols':
-                    filterAttrib = this.filters.find(i => i['column'] == columnNumber);
-                    if (!filterAttrib) {
-                        filterAttrib = [];
-                        filterAttrib.filter = false;
-                    }
-                    break;
-                case 'all':
-                    filterAttrib.column = columnNumber; 
-                    filterAttrib.filter = true;
-                    filterAttrib.actions = [
-                        {label: 'Set Filter', disabled: false, name: 'filter_' + columnNumber, iconName: 'utility:filter'},
-                        {label: 'Clear Filter', disabled: true, name: 'clear_' + columnNumber, iconName: 'utility:clear'}
-                    ]; 
-                    break;
-                default:
-                    filterAttrib.filter = false;
-            }
+            if (this.isConfigMode) {
+                filterAttrib.column = columnNumber; 
+                filterAttrib.filter = true;
+                filterAttrib.actions = [
+                    {label: 'Change Label', disabled: false, name: 'label_' + columnNumber, iconName: 'utility:edit'},
+                    {label: 'Cancel Change', disabled: true, name: 'clear_' + columnNumber, iconName: 'utility:clear'}
+                ];
 
-            // Some data types are not filterable
-            if(filterAttrib) {
-                switch (type) {
-                    case 'location':
-                        filterAttrib.filter = false;
+            } else {
+                switch (this.filterAttribType) {
+                    case 'cols':
+                        filterAttrib = this.filters.find(i => i['column'] == columnNumber);
+                        if (!filterAttrib) {
+                            filterAttrib = [];
+                            filterAttrib.filter = false;
+                        }
+                        break;
+                    case 'all':
+                        filterAttrib.column = columnNumber; 
+                        filterAttrib.filter = true;
+                        filterAttrib.actions = [
+                            {label: 'Set Filter', disabled: false, name: 'filter_' + columnNumber, iconName: 'utility:filter'},
+                            {label: 'Clear Filter', disabled: true, name: 'clear_' + columnNumber, iconName: 'utility:clear'}
+                        ]; 
                         break;
                     default:
+                        filterAttrib.filter = false;
+                }
+
+                // Some data types are not filterable
+                if(filterAttrib) {
+                    switch (type) {
+                        case 'location':
+                            filterAttrib.filter = false;
+                            break;
+                        default:
+                    }
                 }
             }
 
@@ -863,6 +879,7 @@ export default class DatatableV2 extends LightningElement {
         this.sortedDirection = event.detail.sortDirection;
         this.doSort(this.sortedBy, this.sortedDirection);
     }
+
     doSort(sortField, sortDirection) {
         // Change sort field from Id to Name for lookups
         if (sortField.endsWith('_lookup')) {
@@ -878,14 +895,26 @@ export default class DatatableV2 extends LightningElement {
     handleHeaderAction(event) {
         // Handle Set Filter and Clear Filter
         const actionName = event.detail.action.name;
-        if (actionName.search('filter') == -1 && actionName.search('clear') == -1) return;
+        if (actionName.search('filter') == -1 && actionName.search('clear') == -1 && actionName.search('label') == -1) return;
         this.isFiltered = false;
         const colDef = event.detail.columnDefinition;
         this.filterColumns = JSON.parse(JSON.stringify([...this.columns]));
         this.columnNumber = Number(actionName.split("_")[1]);     
         this.baseLabel = this.filterColumns[this.columnNumber].label.split(' [')[0];
-        this.inputLabel = 'Column Filter: ' + this.baseLabel;
+        const prompt = (this.isConfigMode) ? 'Label' : 'Filter';
+        this.inputLabel = 'Column ' + prompt + ': ' + this.baseLabel;
         switch(actionName.split('_')[0]) {
+
+            case 'label':   // Config Mode Only
+                this.columnFilterValue = this.columnFilterValues[this.columnNumber];
+                this.columnFilterValue = (this.columnFilterValue) ? this.columnFilterValue : this.baseLabel;
+                this.columnType = 'text';
+                this.inputType = this.convertType(this.columnType);
+                this.inputFormat = (this.inputType == 'number') ? this.convertFormat(this.columnType) : null;
+
+                this.handleOpenFilterInput();
+                
+                break;
 
             case 'filter':
                 this.columnFilterValue = this.columnFilterValues[this.columnNumber];
@@ -899,10 +928,12 @@ export default class DatatableV2 extends LightningElement {
                 break;
 
             case 'clear':
-                this.filterColumns[this.columnNumber].label = this.baseLabel;
+                this.filterColumns[this.columnNumber].label = (this.isConfigMode) ? this.cols[this.columnNumber].label : this.baseLabel;
                 this.columnFilterValue = null;
                 this.columnFilterValues[this.columnNumber] = this.columnFilterValue;
-
+                if (this.isConfigMode) {
+                    this.updateLabelParam();
+                }
                 this.filterColumnData();
 
                 this.filterColumns[this.columnNumber].actions[CLEAR_ACTION].disabled = true;
@@ -958,6 +989,18 @@ export default class DatatableV2 extends LightningElement {
         }
     }
 
+    handleResize(event) {
+        const sizes = event.detail.columnWidths;
+        // this.columnWidthList = sizes.join(', ');
+        var colNum = 0;
+        var colString = '';
+        this.basicColumns.forEach(colDef => {
+            colString = colString + ', ' + colDef['fieldName'] + ':' + sizes[colNum];
+            colNum += 1;
+        });
+        this.columnWidthList = colString.substring(2);
+    }
+
     handleChange(event) {
         // Update the filter value as the user types it in
         this.columnFilterValue = event.target.value;
@@ -992,7 +1035,12 @@ export default class DatatableV2 extends LightningElement {
 
         if (!this.isFiltered) this.filterColumnData();
 
-        this.filterColumns[this.columnNumber].label = this.baseLabel + ' [' + this.columnFilterValue + ']';
+        if (this.isConfigMode) {
+            this.filterColumns[this.columnNumber].label = this.columnFilterValue;
+            this.updateLabelParam();
+        } else {
+            this.filterColumns[this.columnNumber].label = this.baseLabel + ' [' + this.columnFilterValue + ']';
+        }
         this.columnFilterValues[this.columnNumber] = this.columnFilterValue;
         // Force a redisplay of the datatable with the filter value shown in the column header
         this.columns = [...this.filterColumns]; 
@@ -1000,52 +1048,67 @@ export default class DatatableV2 extends LightningElement {
 
     filterColumnData() {
         // Filter the rows based on the current column filter values
-        const rows = [...this.savePreEditData];
-        const cols = this.columnFilterValues;
-        var filteredRows = [];
-        rows.forEach(row => {
-            var match = true;
-            for (var col = 0; col < cols.length; col++) {
-                var fieldName = this.filterColumns[col].fieldName;
-                if (fieldName.endsWith('_lookup')) {
-                    fieldName = fieldName.slice(0,fieldName.lastIndexOf('_lookup')) + '_name';   
-                }                
-                if (this.columnFilterValues[col] && this.columnFilterValues[col] != null) {
-                    if (!row[fieldName] || row[fieldName] == null) {    // No match because the field is empty
-                        match = false;
-                        break; 
-                    }                   
+        if (!this.isConfigMode) {
+            const rows = [...this.savePreEditData];
+            const cols = this.columnFilterValues;
+            var filteredRows = [];
+            rows.forEach(row => {
+                var match = true;
+                for (var col = 0; col < cols.length; col++) {
+                    var fieldName = this.filterColumns[col].fieldName;
+                    if (fieldName.endsWith('_lookup')) {
+                        fieldName = fieldName.slice(0,fieldName.lastIndexOf('_lookup')) + '_name';   
+                    }                
+                    if (this.columnFilterValues[col] && this.columnFilterValues[col] != null) {
+                        if (!row[fieldName] || row[fieldName] == null) {    // No match because the field is empty
+                            match = false;
+                            break; 
+                        }                   
 
-                    switch(this.filterColumns[col].type) {
-                        case 'number':
-                        case 'currency':
-                        case 'percent':
-                            if (row[fieldName] != this.columnFilterValues[col]) {    // Check for exact match on numeric fields
-                                match = false;
-                                break;                                
-                            }
-                            break;
-                        default:
-                            var fieldValue = row[fieldName].toString();
-                            var filterValue = this.columnFilterValues[col];
-                            if (!this.matchCaseOnFilters) {
-                                fieldValue = fieldValue.toLowerCase();
-                                filterValue = filterValue.toLowerCase();
-                            }
-                            if (fieldValue.search(filterValue) == -1) {  // Check for filter value within field value
-                                match = false;
+                        switch(this.filterColumns[col].type) {
+                            case 'number':
+                            case 'currency':
+                            case 'percent':
+                                if (row[fieldName] != this.columnFilterValues[col]) {    // Check for exact match on numeric fields
+                                    match = false;
+                                    break;                                
+                                }
                                 break;
-                            }                            
+                            default:
+                                var fieldValue = row[fieldName].toString();
+                                var filterValue = this.columnFilterValues[col];
+                                if (!this.matchCaseOnFilters) {
+                                    fieldValue = fieldValue.toLowerCase();
+                                    filterValue = filterValue.toLowerCase();
+                                }
+                                if (fieldValue.search(filterValue) == -1) {  // Check for filter value within field value
+                                    match = false;
+                                    break;
+                                }                            
+                        }
                     }
                 }
-            }
-            if (match) {
-                filteredRows.push(row);
-            }
-        });
+                if (match) {
+                    filteredRows.push(row);
+                }
+            });
+            this.mydata = filteredRows;
+        }
         this.filterColumns[this.columnNumber].actions[CLEAR_ACTION].disabled = false;
-        this.mydata = filteredRows;
         this.isFiltered = true;
+    }
+
+    updateLabelParam() {
+        // Create the Column Label parameter for Config Mode
+        var colNum = 0;
+        var colString = '';
+        this.basicColumns.forEach(colDef => {
+            if (colDef['label'] != this.filterColumns[colNum].label) {
+                colString = colString + ', ' + colDef['fieldName'] + ':' + this.filterColumns[colNum].label;
+            }
+            colNum += 1;
+        });
+        this.columnLabelList = colString.substring(2);
     }
 
 }
