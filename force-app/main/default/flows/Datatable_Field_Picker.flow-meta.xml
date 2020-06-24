@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Get_All_Fields</name>
+        <label>Get All Fields</label>
+        <locationX>563</locationX>
+        <locationY>40</locationY>
+        <actionName>GetFieldInformation</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Select_Fields</targetReference>
+        </connector>
+        <inputParameters>
+            <name>objectName</name>
+            <value>
+                <elementReference>PickObject.objectType</elementReference>
+            </value>
+        </inputParameters>
+        <outputParameters>
+            <assignToReference>apexColFieldDescriptors</assignToReference>
+            <name>fields</name>
+        </outputParameters>
+    </actionCalls>
+    <description>Run this Flow to select a list of fields to feed into your Datatable flow component.  After selecting your fields you can view a sample table to work with to adjust column widths and change labels.</description>
+    <interviewLabel>Datatable Field Picker {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Datatable Field Picker</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Flow</processType>
+    <screens>
+        <name>Deploy_Flow</name>
+        <label>Deploy Flow</label>
+        <locationX>803</locationX>
+        <locationY>40</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Run_New_SubFlow</targetReference>
+        </connector>
+        <fields>
+            <name>PleaseWait</name>
+            <fieldText>&lt;p&gt;&lt;b&gt;Please wait until you see the following message before clicking Next.&lt;/b&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Job Status: Flow converted successfully.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <fields>
+            <name>DeployMetadata</name>
+            <extensionName>c:transferMetadata</extensionName>
+            <fieldType>ComponentInstance</fieldType>
+            <inputParameters>
+                <name>metadataName</name>
+                <value>
+                    <stringValue>DatatableConfigFlow</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>objectType</name>
+                <value>
+                    <stringValue>Flow</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>transferMode</name>
+                <value>
+                    <stringValue>deploy</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>metadataString</name>
+                <value>
+                    <elementReference>DatatableConfigFlow</elementReference>
+                </value>
+            </inputParameters>
+            <isRequired>true</isRequired>
+            <storeOutputAutomatically>true</storeOutputAutomatically>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>Object_Picker</name>
+        <label>Object Picker</label>
+        <locationX>443</locationX>
+        <locationY>40</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Get_All_Fields</targetReference>
+        </connector>
+        <fields>
+            <name>PickObject</name>
+            <extensionName>c:pickObjectAndFieldFSC</extensionName>
+            <fieldType>ComponentInstance</fieldType>
+            <inputParameters>
+                <name>hideFieldPicklist</name>
+                <value>
+                    <booleanValue>true</booleanValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>masterLabel</name>
+                <value>
+                    <stringValue>Select the Object for your Datatable </stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>objectLabel</name>
+                <value>
+                    <stringValue>SObject</stringValue>
+                </value>
+            </inputParameters>
+            <isRequired>true</isRequired>
+            <storeOutputAutomatically>true</storeOutputAutomatically>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>Select_Fields</name>
+        <label>Select Fields</label>
+        <locationX>683</locationX>
+        <locationY>40</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Deploy_Flow</targetReference>
+        </connector>
+        <fields>
+            <name>Object</name>
+            <fieldText>&lt;p&gt;&lt;b style=&quot;font-size: 18px;&quot;&gt;{!PickObject.objectType}&lt;/b&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <fields>
+            <name>SelectFields</name>
+            <extensionName>c:dualListBox2</extensionName>
+            <fieldType>ComponentInstance</fieldType>
+            <inputParameters>
+                <name>allOptionsStringFormat</name>
+                <value>
+                    <stringValue>object</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>useWhichObjectKeyForData</name>
+                <value>
+                    <stringValue>name</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>required</name>
+                <value>
+                    <booleanValue>true</booleanValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>allOptionsFieldDescriptorList</name>
+                <value>
+                    <elementReference>apexColFieldDescriptors</elementReference>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>min</name>
+                <value>
+                    <numberValue>1.0</numberValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>max</name>
+                <value>
+                    <numberValue>20.0</numberValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>size</name>
+                <value>
+                    <numberValue>10.0</numberValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>label</name>
+                <value>
+                    <stringValue>Select and Order your Datatable Fields</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>sourceLabel</name>
+                <value>
+                    <stringValue>Available</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>selectedLabel</name>
+                <value>
+                    <stringValue>Selected</stringValue>
+                </value>
+            </inputParameters>
+            <isRequired>true</isRequired>
+            <storeOutputAutomatically>true</storeOutputAutomatically>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <start>
+        <locationX>58</locationX>
+        <locationY>64</locationY>
+        <connector>
+            <targetReference>Object_Picker</targetReference>
+        </connector>
+    </start>
+    <status>Draft</status>
+    <subflows>
+        <name>Run_New_SubFlow</name>
+        <label>Run New SubFlow</label>
+        <locationX>923</locationX>
+        <locationY>40</locationY>
+        <flowName>DatatableConfigFlow</flowName>
+        <inputAssignments>
+            <name>vFieldList</name>
+            <value>
+                <elementReference>SelectFields.selectedOptionsCSV</elementReference>
+            </value>
+        </inputAssignments>
+    </subflows>
+    <textTemplates>
+        <name>DatatableConfigFlow</name>
+        <text>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;Flow xmlns=&quot;http://soap.sforce.com/2006/04/metadata&quot;&gt;
+&lt;interviewLabel&gt;DatatableConfigFlow{!$Flow.CurrentDateTime}&lt;/interviewLabel&gt;
+&lt;label&gt;Datatable Config - Set Column Labels and Widths&lt;/label&gt;
+&lt;processMetadataValues&gt;
+&lt;name&gt;BuilderType&lt;/name&gt;
+&lt;value&gt;
+&lt;stringValue&gt;LightningFlowBuilder&lt;/stringValue&gt;
+&lt;/value&gt;
+&lt;/processMetadataValues&gt;
+&lt;processMetadataValues&gt;
+&lt;name&gt;OriginBuilderType&lt;/name&gt;
+&lt;value&gt;
+&lt;stringValue&gt;LightningFlowBuilder&lt;/stringValue&gt;
+&lt;/value&gt;
+&lt;/processMetadataValues&gt;
+&lt;processType&gt;Flow&lt;/processType&gt;
+&lt;recordLookups&gt;
+&lt;name&gt;Get_Records&lt;/name&gt;
+&lt;label&gt;Get Records&lt;/label&gt;
+&lt;locationX&gt;269&lt;/locationX&gt;
+&lt;locationY&gt;196&lt;/locationY&gt;
+&lt;assignNullValuesIfNoRecordsFound&gt;false&lt;/assignNullValuesIfNoRecordsFound&gt;
+&lt;connector&gt;
+&lt;targetReference&gt;Display_Sample_Table&lt;/targetReference&gt;
+&lt;/connector&gt;
+&lt;getFirstRecordOnly&gt;false&lt;/getFirstRecordOnly&gt;
+&lt;object&gt;{!PickObject.objectType}&lt;/object&gt;
+&lt;storeOutputAutomatically&gt;true&lt;/storeOutputAutomatically&gt;
+&lt;/recordLookups&gt;
+&lt;screens&gt;
+&lt;name&gt;Display_Sample_Table&lt;/name&gt;
+&lt;label&gt;Display Sample Table&lt;/label&gt;
+&lt;locationX&gt;411&lt;/locationX&gt;
+&lt;locationY&gt;279&lt;/locationY&gt;
+&lt;allowBack&gt;true&lt;/allowBack&gt;
+&lt;allowFinish&gt;true&lt;/allowFinish&gt;
+&lt;allowPause&gt;false&lt;/allowPause&gt;
+&lt;fields&gt;
+&lt;name&gt;Sample&lt;/name&gt;
+&lt;dataTypeMappings&gt;
+&lt;typeName&gt;T&lt;/typeName&gt;
+&lt;typeValue&gt;{!PickObject.objectType}&lt;/typeValue&gt;
+&lt;/dataTypeMappings&gt;
+&lt;extensionName&gt;c:datatableV2&lt;/extensionName&gt;
+&lt;fieldType&gt;ComponentInstance&lt;/fieldType&gt;
+&lt;inputParameters&gt;
+&lt;name&gt;columnFields&lt;/name&gt;
+&lt;value&gt;
+&lt;elementReference&gt;vFieldList&lt;/elementReference&gt;
+&lt;/value&gt;
+&lt;/inputParameters&gt;
+&lt;inputParameters&gt;
+&lt;name&gt;tableData&lt;/name&gt;
+&lt;value&gt;
+&lt;elementReference&gt;Get_Records&lt;/elementReference&gt;
+&lt;/value&gt;
+&lt;/inputParameters&gt;
+&lt;inputParameters&gt;
+&lt;name&gt;maxNumberOfRows&lt;/name&gt;
+&lt;value&gt;
+&lt;numberValue&gt;5.0&lt;/numberValue&gt;
+&lt;/value&gt;
+&lt;/inputParameters&gt;
+&lt;inputParameters&gt;
+&lt;name&gt;isConfigMode&lt;/name&gt;
+&lt;value&gt;
+&lt;booleanValue&gt;true&lt;/booleanValue&gt;
+&lt;/value&gt;
+&lt;/inputParameters&gt;
+&lt;inputParameters&gt;
+&lt;name&gt;columnFilters&lt;/name&gt;
+&lt;value&gt;
+&lt;stringValue&gt;all&lt;/stringValue&gt;
+&lt;/value&gt;
+&lt;/inputParameters&gt;
+&lt;isRequired&gt;true&lt;/isRequired&gt;
+&lt;storeOutputAutomatically&gt;true&lt;/storeOutputAutomatically&gt;
+&lt;/fields&gt;
+&lt;showFooter&gt;true&lt;/showFooter&gt;
+&lt;showHeader&gt;true&lt;/showHeader&gt;
+&lt;/screens&gt;
+&lt;start&gt;
+&lt;locationX&gt;50&lt;/locationX&gt;
+&lt;locationY&gt;50&lt;/locationY&gt;
+&lt;connector&gt;
+&lt;targetReference&gt;Get_Records&lt;/targetReference&gt;
+&lt;/connector&gt;
+&lt;/start&gt;
+&lt;status&gt;Draft&lt;/status&gt;
+&lt;variables&gt;
+&lt;name&gt;vFieldList&lt;/name&gt;
+&lt;dataType&gt;String&lt;/dataType&gt;
+&lt;isCollection&gt;false&lt;/isCollection&gt;
+&lt;isInput&gt;true&lt;/isInput&gt;
+&lt;isOutput&gt;false&lt;/isOutput&gt;
+&lt;/variables&gt;
+&lt;/Flow&gt;</text>
+    </textTemplates>
+    <variables>
+        <name>apexColFieldDescriptors</name>
+        <apexClass>FieldDescriptor</apexClass>
+        <dataType>Apex</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

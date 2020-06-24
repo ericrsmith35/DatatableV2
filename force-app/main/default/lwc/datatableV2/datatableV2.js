@@ -452,13 +452,13 @@ export default class DatatableV2 extends LightningElement {
                 // Done processing the datatable
                 this.showSpinner = false;
 
-            // })  // Handle any errors from the Apex Class
-            // .catch(error => {
-            //     console.log('getReturnResults error is: ' + JSON.stringify(error));
-            //     this.errorApex = 'Apex Action error: ' + error.body.message;
-            //     alert(this.errorApex + '\n'  + error.body.stackTrace);  // Present the error to the user
-            //     this.showSpinner = false;
-            //     return this.errorApex; 
+            })  // Handle any errors from the Apex Class
+            .catch(error => {
+                console.log('getReturnResults error is: ' + JSON.stringify(error));
+                this.errorApex = 'Apex Action error: ' + error.body.message;
+                alert(this.errorApex + '\n'  + error.body.stackTrace);  // Present the error to the user
+                this.showSpinner = false;
+                return this.errorApex; 
             });
 
         }
@@ -990,11 +990,16 @@ export default class DatatableV2 extends LightningElement {
     }
 
     handleResize(event) {
+        // Save the current column widths and update the config parameter
         const sizes = event.detail.columnWidths;
         // this.columnWidthList = sizes.join(', ');
         var colNum = 0;
         var colString = '';
         this.basicColumns.forEach(colDef => {
+            this.columns[colNum]['initialWidth'] = sizes[colNum];
+            if (this.filterColumns) {
+                this.filterColumns[colNum]['initialWidth'] = sizes[colNum];
+            }
             colString = colString + ', ' + colDef['fieldName'] + ':' + sizes[colNum];
             colNum += 1;
         });
