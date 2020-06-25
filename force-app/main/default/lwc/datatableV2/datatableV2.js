@@ -1,6 +1,8 @@
 /**
  * Lightning Web Component for Flow Screens:       datatableV2
  * 
+ * RELEASE NOTES       https://github.com/ericrsmith35/DatatableV2/blob/master/README.md
+ * 
  * Copyright (c) 2020, Eric Smith
  * 
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided 
