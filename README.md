@@ -32,8 +32,7 @@ Twitter: https://twitter.com/esmith35
 
 ## Release Notes
 06/24/20 -  Eric Smith -    Version 2.34 -  
-            Updates:        Added **Datatable Configuration Helper** Flow  
-                            (Requires transferMetadata LWC @ https://unofficialsf.com/retrieve-and-deploy-metadata-with-flow-using-transfer-metadata-as-a-screen-component/)  
+            Updates:        Added Configuration Mode parameter (Used by Datatable Configuration Flow)  
             Bug Fix:        Fixed issue with column widths resetting when filtering  
   
 06/19/20 -  Eric Smith -    Version 2.33 -  
