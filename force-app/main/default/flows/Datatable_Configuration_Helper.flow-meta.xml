@@ -22,8 +22,8 @@
         </outputParameters>
     </actionCalls>
     <description>Run this Flow to select a list of fields to feed into your Datatable flow component.  After selecting your fields you can view a sample table to work with to adjust column widths and change labels.</description>
-    <interviewLabel>Datatable Field Picker {!$Flow.CurrentDateTime}</interviewLabel>
-    <label>Datatable Field Picker</label>
+    <interviewLabel>Datatable Configuration Helper {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Datatable Configuration Helper</label>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>

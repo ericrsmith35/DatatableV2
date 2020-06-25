@@ -32,8 +32,9 @@ Twitter: https://twitter.com/esmith35
 
 ## Release Notes
 
-06/xx/20 -  Eric Smith -    Version 2.33 -  
-            Updates:        Removed default value for Table Height                                                
+06/19/20 -  Eric Smith -    Version 2.33 -  
+            Updates:        Removed default value for Table Height
+            Bug Fix:        Fixed issue with lookup fields being blank in the first record                                                    
   
 06/03/20 -  Eric Smith -    Version 2.32 -  
             Bug Fix:        Fixed error when editing more than one column in a single row while suppressing the Cancel/Save buttons
