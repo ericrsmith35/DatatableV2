@@ -1,2 +1,5 @@
 .sfdx
 .sfdx\tools\
+.sfdx/tools/apex.db
+.sfdx/tools/
+.sfdx\tools\apex.db

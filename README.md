@@ -31,6 +31,11 @@ Twitter: https://twitter.com/esmith35
 ---
 
 ## Release Notes
+06/30/20 -  Eric Smith -    Version 2.35 -  
+            Updates:        Extended Configuration Mode to handle Column Alignments, Labels, Widths, Allow Edit & Allow Filter  
+                            Added Configuration Mode buttons to select all columns for Edit and/or Filter  
+                            Selecting an attribute string now copies the contents into the system Clipboard  
+                              
 06/24/20 -  Eric Smith -    Version 2.34 -  
             Updates:        Added Configuration Mode parameter (Used by Datatable Configuration Flow)  
             Bug Fix:        Fixed issue with column widths resetting when filtering  
