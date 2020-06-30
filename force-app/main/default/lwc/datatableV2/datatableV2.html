@@ -10,9 +10,10 @@ Additional components packaged with this LWC:
 
                     Apex Classes:               SObjectController2 
                                                 SObjectController2Test
-                                               
 
-RELEASE NOTES       https://github.com/ericrsmith35/DatatableV2/blob/master/README.md
+VERSION:            2.35
+
+RELEASE NOTES:      https://github.com/ericrsmith35/DatatableV2/blob/master/README.md
 
 04/01/20 -  Eric Smith -    Version 1.0
 Features:   The only required paramters are the SObject collection of records and a list of field API names
@@ -66,6 +67,12 @@ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVE
             <div style="height: 40px;">
                 <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
                     <div class="slds-modal__container">
+                        <header class="slds-modal__header slds-modal__header_empty">
+                            <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={handleCloseModal}>
+                                <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse" size="small"></lightning-icon>
+                                <span class="slds-assistive-text">Close</span>
+                            </button>
+                        </header>
                         <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
                             <lightning-input 
                                 type={inputType}
@@ -73,11 +80,13 @@ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVE
                                 label={inputLabel} 
                                 value={columnFilterValue} 
                                 onchange={handleChange}
-                                onblur={handleCloseFilterInput} 
-                                oncommit={handleCommit}
                             >
                             </lightning-input>
                         </div>
+                        <footer class="slds-modal__footer">
+                            <button class="slds-button slds-button_neutral" onclick={handleCloseModal}>Cancel</button>
+                            <button class="slds-button slds-button_brand" onclick={handleCommit}>Save</button>
+                        </footer>
                     </div>
                 </section>
                 <div class="slds-backdrop slds-backdrop_open"></div>
@@ -108,15 +117,51 @@ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVE
             </lightning-datatable>
         </div>
 
+        <!-- Special parameter display for Configuration Mode -->
         <template if:true={isConfigMode}>
-            <lightning-card>
-                <h3 slot="title">Copy these values into your datatableV2 parameters.</h3>
-                <lightning-textarea readonly value={columnFields} label="Column Fields:"></lightning-textarea>
+            <div>
                 </br>
-                <lightning-textarea readonly value={columnLabelList} label="Column Labels:"></lightning-textarea>
+                <p><span class="slds-text-heading_medium">Click the attribute to load the clipboard with the value to be pasted into your datatableV2 parameter.</span></p>
                 </br>
-                <lightning-textarea readonly value={columnWidthList} label="Column Widths:"></lightning-textarea>
-            </lightning-card>
+            </div>
+            <div class="slds-m-horizontal_medium">
+                <div class="slds-box slds-m-vertical_xx-small">
+                    <p><span class="slds-text-heading_small">Column Fields:</span></p>
+                    <lightning-pill label={columnFieldParameter} onremove={handleRemove} onclick={handleCopyFields}></lightning-pill>
+                </div>
+                <div class="slds-box slds-m-vertical_xx-small">
+                    <p><span class="slds-text-heading_small">Column Alignments:</span></p>
+                    <lightning-pill label={columnAlignmentParameter} onremove={handleRemove} onclick={handleCopyAligns}></lightning-pill>
+                </div>
+                <div class="slds-box slds-m-vertical_xx-small">
+                    <p><span class="slds-text-heading_small">Column Edits: 
+                        <lightning-button
+                            label="Select All Columns" variant="brand-outline" onclick={handleSelectAllEdit} class="slds-float_right">
+                        </lightning-button>
+                    </span></p>
+                    <lightning-pill label={columnEditParameter} onremove={handleRemove} onclick={handleCopyEdits}></lightning-pill>
+                </div>
+                <div class="slds-box slds-m-vertical_xx-small">
+                    <p><span class="slds-text-heading_small">Column Filters: 
+                        <lightning-button
+                            label="Select All Columns" variant="brand-outline" onclick={handleSelectAllFilter} class="slds-float_right">
+                        </lightning-button>
+                    </span></p>
+                    <lightning-pill label={columnFilterParameter} onremove={handleRemove} onclick={handleCopyFilters}></lightning-pill>
+                </div>
+                <div class="slds-box slds-m-vertical_xx-small">
+                    <p><span class="slds-text-heading_small">Column Labels:</span></p>
+                    <lightning-pill label={columnLabelParameter} onremove={handleRemove} onclick={handleCopyLabels}></lightning-pill>
+                </div>
+                <div class="slds-box slds-m-vertical_xx-small">
+                    <p><span class="slds-text-heading_small">Column Widths:</span></p>
+                    <lightning-pill label={columnWidthParameter} onremove={handleRemove} onclick={handleCopyWidths}></lightning-pill>
+                </div>
+                <div class="slds-box slds-box_x-small slds-theme_alert-texture slds-m-vertical_xx-small">
+                    <p><span class="slds-text-heading_small">Clipboard Contents:</span></p>
+                    <input disabled class="my-clipboard"/>
+                </div>               
+            </div>
         </template>
 
     </template>

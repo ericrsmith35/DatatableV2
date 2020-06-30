@@ -1,7 +1,9 @@
 /**
  * Lightning Web Component for Flow Screens:       datatableV2
  * 
- * RELEASE NOTES       https://github.com/ericrsmith35/DatatableV2/blob/master/README.md
+ * VERSION:             2.35
+ * 
+ * RELEASE NOTES:       https://github.com/ericrsmith35/DatatableV2/blob/master/README.md
  * 
  * Copyright (c) 2020, Eric Smith
  * 
@@ -32,8 +34,6 @@ import { FlowAttributeChangeEvent } from 'lightning/flowSupport';
 const MAXROWCOUNT = 1000;   // Limit the total number of records to be handled by this component
 
 const MYDOMAIN = 'https://' + window.location.hostname.split('.')[0].replace('--c','');
-const FILTER_ACTION = 0;    // Column Action Attribute Number
-const CLEAR_ACTION = 1;     // Column Action Attribute Number
 
 export default class DatatableV2 extends LightningElement {
     
@@ -98,6 +98,7 @@ export default class DatatableV2 extends LightningElement {
     @api columnNumber;
     @api baseLabel;
     @api isFiltered;
+    @api saveOriginalValue;
     @track columnFilterValue = null;
     @track isOpenFilterInput = false;
     @track inputLabel;
@@ -137,8 +138,12 @@ export default class DatatableV2 extends LightningElement {
     @api recordData = [];
     @track showSpinner = true;
     @track borderClass;
-    @track columnLabelList;
-    @track columnWidthList;
+    @track columnFieldParameter;
+    @track columnAlignmentParameter;
+    @track columnLabelParameter;
+    @track columnWidthParameter;
+    @track columnEditParameter;
+    @track columnFilterParameter;
 
     connectedCallback() {
 
@@ -164,6 +169,7 @@ export default class DatatableV2 extends LightningElement {
 
         // Get array of column field API names
         this.columnArray = (this.columnFields.length > 0) ? this.columnFields.replace(/\s/g, '').split(',') : [];
+        this.columnFieldParameter = this.columnArray.join(', ');
         console.log('columnArray - ',this.columnArray);  
 
         // JSON Version - Build basicColumns default values
@@ -589,9 +595,16 @@ export default class DatatableV2 extends LightningElement {
                 filterAttrib.column = columnNumber; 
                 filterAttrib.filter = true;
                 filterAttrib.actions = [
-                    {label: 'Change Label', disabled: false, name: 'label_' + columnNumber, iconName: 'utility:edit'},
-                    {label: 'Cancel Change', disabled: true, name: 'clear_' + columnNumber, iconName: 'utility:clear'}
+                    {label: 'Align Left', checked: (this.convertType(type) != 'number'), name: 'alignl_' + columnNumber, iconName: 'utility:left_align_text'},
+                    {label: 'Align Center', checked: false, name: 'alignc_' + columnNumber, iconName: 'utility:center_align_text'},
+                    {label: 'Align Right', checked: (this.convertType(type) == 'number'), name: 'alignr_' + columnNumber, iconName: 'utility:right_align_text'},
+                    {label: 'Change Label', disabled: false, name: 'label_' + columnNumber, iconName: 'utility:text'},
+                    {label: 'Cancel Change', disabled: true, name: 'clear_' + columnNumber, iconName: 'utility:clear'},
+                    {label: 'Allow Edit', checked: false, name: 'aedit_' + columnNumber, iconName: 'utility:edit'},
+                    {label: 'Allow Filter', checked: false, name: 'afilter_' + columnNumber, iconName: 'utility:filter'}
                 ];
+                let configAlign = (this.convertType(type) != 'number') ? 'left' : 'right';
+                this.cellAttributes = { alignment: configAlign };
 
             } else {
                 switch (this.filterAttribType) {
@@ -897,7 +910,6 @@ export default class DatatableV2 extends LightningElement {
     handleHeaderAction(event) {
         // Handle Set Filter and Clear Filter
         const actionName = event.detail.action.name;
-        if (actionName.search('filter') == -1 && actionName.search('clear') == -1 && actionName.search('label') == -1) return;
         this.isFiltered = false;
         const colDef = event.detail.columnDefinition;
         this.filterColumns = JSON.parse(JSON.stringify([...this.columns]));
@@ -907,15 +919,52 @@ export default class DatatableV2 extends LightningElement {
         this.inputLabel = 'Column ' + prompt + ': ' + this.baseLabel;
         switch(actionName.split('_')[0]) {
 
+            case 'alignl':   // Config Mode Only
+                this.filterColumns[this.columnNumber].cellAttributes = {alignment: 'left'};
+                this.filterColumns[this.columnNumber].actions.find(a => a.name == 'alignl_'+this.columnNumber).checked = true;
+                this.filterColumns[this.columnNumber].actions.find(a => a.name == 'alignc_'+this.columnNumber).checked = false;
+                this.filterColumns[this.columnNumber].actions.find(a => a.name == 'alignr_'+this.columnNumber).checked = false;
+                this.columns = [...this.filterColumns]; 
+                this.updateAlignmentParam();
+                break;
+
+            case 'alignc':   // Config Mode Only
+                this.filterColumns[this.columnNumber].cellAttributes = {alignment: 'center'};
+                this.filterColumns[this.columnNumber].actions.find(a => a.name == 'alignl_'+this.columnNumber).checked = false;
+                this.filterColumns[this.columnNumber].actions.find(a => a.name == 'alignc_'+this.columnNumber).checked = true;
+                this.filterColumns[this.columnNumber].actions.find(a => a.name == 'alignr_'+this.columnNumber).checked = false;
+                this.columns = [...this.filterColumns]; 
+                this.updateAlignmentParam();
+                break;
+
+            case 'alignr':   // Config Mode Only
+                this.filterColumns[this.columnNumber].cellAttributes = {alignment: 'right'};
+                this.filterColumns[this.columnNumber].actions.find(a => a.name == 'alignl_'+this.columnNumber).checked = false;
+                this.filterColumns[this.columnNumber].actions.find(a => a.name == 'alignc_'+this.columnNumber).checked = false;
+                this.filterColumns[this.columnNumber].actions.find(a => a.name == 'alignr_'+this.columnNumber).checked = true;
+                this.columns = [...this.filterColumns]; 
+                this.updateAlignmentParam();
+                break;
+
+            case 'aedit':   // Config Mode Only
+                this.filterColumns[this.columnNumber].actions.find(a => a.name == 'aedit_'+this.columnNumber).checked ^= true;      // Flip True-False Value
+                this.columns = [...this.filterColumns]; 
+                this.updateEditParam();
+                break;
+
+            case 'afilter': // Config Mode Only
+                this.filterColumns[this.columnNumber].actions.find(a => a.name == 'afilter_'+this.columnNumber).checked ^= true;    // Flip True-False Value
+                this.columns = [...this.filterColumns]; 
+                this.updateFilterParam();
+                break;
+
             case 'label':   // Config Mode Only
                 this.columnFilterValue = this.columnFilterValues[this.columnNumber];
                 this.columnFilterValue = (this.columnFilterValue) ? this.columnFilterValue : this.baseLabel;
                 this.columnType = 'text';
                 this.inputType = this.convertType(this.columnType);
                 this.inputFormat = (this.inputType == 'number') ? this.convertFormat(this.columnType) : null;
-
                 this.handleOpenFilterInput();
-                
                 break;
 
             case 'filter':
@@ -924,9 +973,7 @@ export default class DatatableV2 extends LightningElement {
                 this.columnType = colDef.type;
                 this.inputType = this.convertType(this.columnType);
                 this.inputFormat = (this.inputType == 'number') ? this.convertFormat(this.columnType) : null;
-
                 this.handleOpenFilterInput();
-                
                 break;
 
             case 'clear':
@@ -937,8 +984,7 @@ export default class DatatableV2 extends LightningElement {
                     this.updateLabelParam();
                 }
                 this.filterColumnData();
-
-                this.filterColumns[this.columnNumber].actions[CLEAR_ACTION].disabled = true;
+                this.filterColumns[this.columnNumber].actions.find(a => a.name == 'clear_'+this.columnNumber).disabled = true;
                 if (this.sortedBy != undefined) {
                     this.doSort(this.sortedBy, this.sortedDirection);       // Re-Sort the data
                 }
@@ -994,7 +1040,7 @@ export default class DatatableV2 extends LightningElement {
     handleResize(event) {
         // Save the current column widths and update the config parameter
         const sizes = event.detail.columnWidths;
-        // this.columnWidthList = sizes.join(', ');
+        // this.columnWidthParameter = sizes.join(', ');
         var colNum = 0;
         var colString = '';
         this.basicColumns.forEach(colDef => {
@@ -1005,7 +1051,7 @@ export default class DatatableV2 extends LightningElement {
             colString = colString + ', ' + colDef['fieldName'] + ':' + sizes[colNum];
             colNum += 1;
         });
-        this.columnWidthList = colString.substring(2);
+        this.columnWidthParameter = colString.substring(2);
     }
 
     handleChange(event) {
@@ -1015,8 +1061,33 @@ export default class DatatableV2 extends LightningElement {
         this.isFiltered = false;
     }
 
+    handleSelectAllEdit(event) {
+        // Set the Allow Edit Value to True for All Columns
+        this.filterColumns = JSON.parse(JSON.stringify([...this.columns]));
+        var colNum = 0;
+        this.filterColumns.forEach(colDef => {
+            colDef['actions'].find(a => a.name == 'aedit_'+colNum).checked = true;
+            colNum += 1;
+        });
+        this.columnEditParameter = 'All';
+        this.columns = [...this.filterColumns]; 
+    }
+
+    handleSelectAllFilter(event) {
+        // Set the Allow Edit Value to True for All Columns
+        this.filterColumns = JSON.parse(JSON.stringify([...this.columns]));
+        var colNum = 0;
+        this.filterColumns.forEach(colDef => {
+            colDef['actions'].find(a => a.name == 'afilter_'+colNum).checked = true;
+            colNum += 1;
+        });
+        this.columnFilterParameter = 'All';
+        this.columns = [...this.filterColumns]; 
+    }
+
     handleOpenFilterInput() {
         // Display the input dialog for the filter value
+        this.saveOriginalValue = this.columnFilterValue;
         this.isOpenFilterInput = true;
     }
 
@@ -1051,6 +1122,13 @@ export default class DatatableV2 extends LightningElement {
         this.columnFilterValues[this.columnNumber] = this.columnFilterValue;
         // Force a redisplay of the datatable with the filter value shown in the column header
         this.columns = [...this.filterColumns]; 
+    }
+
+    handleCloseModal() {
+        // Close the input dialog and cancel any changes
+        this.columnFilterValue = this.saveOriginalValue;
+        this.columnFilterValues[this.columnNumber] = this.columnFilterValue;
+        this.isOpenFilterInput = false;
     }
 
     filterColumnData() {
@@ -1101,8 +1179,66 @@ export default class DatatableV2 extends LightningElement {
             });
             this.mydata = filteredRows;
         }
-        this.filterColumns[this.columnNumber].actions[CLEAR_ACTION].disabled = false;
+        this.filterColumns[this.columnNumber].actions.find(a => a.name == 'clear_'+this.columnNumber).disabled = false;
         this.isFiltered = true;
+    }
+
+    handleRemove(event) {
+        // Pass directly to handleCopy with no additional handling
+    }
+
+    handleCopyFields(event) {
+        // Copy the Pill Contents to the Clipboard
+        this.pushClipboard(this.columnFieldParameter);
+    }
+
+    handleCopyAligns(event) {
+        // Copy the Pill Contents to the Clipboard
+        this.pushClipboard(this.columnAlignmentParameter);
+    }
+
+    handleCopyEdits(event) {
+        // Copy the Pill Contents to the Clipboard
+        this.pushClipboard(this.columnEditParameter);
+    }
+
+    handleCopyFilters(event) {
+        // Copy the Pill Contents to the Clipboard
+        this.pushClipboard(this.columnFilterParameter);
+    }
+
+    handleCopyLabels(event) {
+        // Copy the Pill Contents to the Clipboard
+        this.pushClipboard(this.columnLabelParameter);
+    }
+
+    handleCopyWidths(event) {
+        // Copy the Pill Contents to the Clipboard
+        this.pushClipboard(this.columnWidthParameter);
+    }
+
+    pushClipboard(content) {
+        // Put the selected attribute value in the clipboard
+        let inp = this.template.querySelector('.my-clipboard');
+        inp.disabled = false;
+        inp.value = content;
+        inp.select();
+        document.execCommand('copy');
+        inp.disabled = true;
+    }
+
+    updateAlignmentParam() {
+        // Create the Alignment Label parameter for Config Mode
+        var colNum = 0;
+        var colString = '';
+        this.filterColumns.forEach(colDef => {
+            let configAlign = (this.convertType(colDef['type']) != 'number') ? 'left' : 'right';
+            if (colDef['cellAttributes']['alignment'] != configAlign) {
+                colString = colString + ', ' + colDef['fieldName'] + ':' + colDef['cellAttributes']['alignment'];
+            }
+            colNum += 1;
+        });
+        this.columnAlignmentParameter = colString.substring(2);       
     }
 
     updateLabelParam() {
@@ -1115,7 +1251,39 @@ export default class DatatableV2 extends LightningElement {
             }
             colNum += 1;
         });
-        this.columnLabelList = colString.substring(2);
+        this.columnLabelParameter = colString.substring(2);
+    }
+
+    updateEditParam() {
+        // Create the Column Edit parameter for Config Mode
+        var colNum = 0;
+        var colString = '';
+        var allSelected = true;
+        this.filterColumns.forEach(colDef => {
+            if (colDef['actions'].find(a => a.name == 'aedit_'+colNum).checked) {          
+                colString = colString + ', ' + colDef['fieldName'] + ':true';   
+            } else {
+                allSelected = false;
+            }
+            colNum += 1;
+        });
+        this.columnEditParameter = (allSelected) ? 'All' : colString.substring(2);
+    }
+
+    updateFilterParam() {
+        // Create the Column Filter parameter for Config Mode
+        var colNum = 0;
+        var colString = '';
+        var allSelected = true;
+        this.filterColumns.forEach(colDef => {
+            if (colDef['actions'].find(a => a.name == 'afilter_'+colNum).checked) {
+                colString = colString + ', ' + colDef['fieldName'] + ':true';
+            } else {
+                allSelected = false;
+            }
+            colNum += 1;
+        });
+        this.columnFilterParameter = (allSelected) ? 'All' : colString.substring(2);
     }
 
 }
