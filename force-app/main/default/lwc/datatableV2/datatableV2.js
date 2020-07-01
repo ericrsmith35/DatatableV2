@@ -89,6 +89,7 @@ export default class DatatableV2 extends LightningElement {
     // Handle Lookup Field Variables   
     @api lookupId;
     @api objectName;
+    @api objectLinkField;
     @track lookupName;
 
     // Column Filter variables
@@ -443,6 +444,7 @@ export default class DatatableV2 extends LightningElement {
                 this.percentFieldArray = (returnResults.percentFieldList.length > 0) ? returnResults.percentFieldList.toString().split(',') : [];
                 this.timeFieldArray = (returnResults.timeFieldList.length > 0) ? returnResults.timeFieldList.toString().split(',') : [];
                 this.objectName = returnResults.objectName;
+                this.objectLinkField = returnResults.objectLinkField;
                 this.lookupFieldArray = JSON.parse('[' + returnResults.lookupFieldData + ']');
 
                 // Basic column info (label, fieldName, type) taken from the Schema in Apex
@@ -510,7 +512,10 @@ export default class DatatableV2 extends LightningElement {
                         record[lufield + '_lookup'] = MYDOMAIN + '.lightning.force.com/lightning/r/' + lookupFieldObject['object'] + '/' + record[lufield + '_id'] + '/view';
                     }
                 }
-            });                
+            }); 
+            
+            // Handle Lookup for the SObject's "Name" Field
+            record[this.objectLinkField + '_lookup'] = MYDOMAIN + '.lightning.force.com/lightning/r/' + this.objectName + '/' + record['Id'] + '/view';
 
             // If needed, add more fields to datatable records
             // (Useful for Custom Row Actions/Buttons)
@@ -707,6 +712,14 @@ export default class DatatableV2 extends LightningElement {
                 } else {
                     this.typeAttrib.type = 'text';      // Non reparentable Master-Detail fields are not supported
                 }
+            }
+
+            // Switch the SObject's "Name" Field to a Lookup
+            if (fieldName == this.objectLinkField) {
+                this.typeAttrib.type = 'url';
+                fieldName = fieldName + '_lookup';
+                this.typeAttributes = { label: { fieldName: this.objectLinkField }, target: '_blank' };
+                this.cellAttributes.wrapText = true;
             }
 
             // Update CellAttribute attribute overrides by column
