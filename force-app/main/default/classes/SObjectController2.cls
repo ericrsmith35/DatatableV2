@@ -16,6 +16,9 @@
  *              of the Name fields in the corresponding records. Return the
  *              records that now include both the Id and Name for each lookup.
  * 
+ * 07/01/20 -   Eric Smith -    Version 2.36    Added a return value for the "Name" field of the SObject
+ *                                              This is used to display that field as a Link in the Datatable
+ * 
  * 06/19/20 -   Eric Smith -    Version 2.33    Fixed issue with lookup fields being blank in the first record
  *                                              Renumbered to match datatableV2 versioning
  * 
@@ -44,6 +47,7 @@ public with sharing class SObjectController2 {
         List<String> noEditFieldList;
         list<String> timeFieldList;
         String objectName;
+        String objectLinkField;
     }
 
     @AuraEnabled
@@ -62,6 +66,7 @@ public with sharing class SObjectController2 {
             curRR.timeFieldList = emptyList;
             curRR.rowData = records;
             curRR.objectName = 'EmptyCollection';
+            curRR.objectLinkField = '';
         } else {           
             String objName = records[0].getSObjectType().getDescribe().getName();
             curRR = getColumnData(curRR, fieldNames, objName);
@@ -87,6 +92,8 @@ public with sharing class SObjectController2 {
         List<String> percentFields = new List<String>();
         List<String> noEditFields = new List<String>();
         List<String> timeFields = new List<String>();
+        String objectLinkField = getNameUniqueField(objName);   // Name (link) Field for the Datatable SObject
+System.debug('*** OBJ/LINK' + objname + '/' + objectLinkField);
 
         for (String fieldName : fields.split(',')) {
 
@@ -96,6 +103,7 @@ public with sharing class SObjectController2 {
                 throw new MyApexException('could not find the field: ' + fieldName + ' on the object ' + objName);
             Schema.DescribeFieldResult dfr = fieldItem.getDescribe();
             curFieldDescribes.add(dfr);
+
             datatableColumnFieldDescriptor = datatableColumnFieldDescriptor 
                 + ',{"label" : "' + dfr.getLabel() 
                 + '", "fieldName" : "' + fieldName 
@@ -136,6 +144,7 @@ public with sharing class SObjectController2 {
         curRR.percentFieldList = percentFields;
         curRR.noEditFieldList = noEditFields;
         curRR.timeFieldList = timeFields;
+        curRR.objectLinkField = objectLinkField;
         return curRR;
     }
 
@@ -205,7 +214,7 @@ public with sharing class SObjectController2 {
                     if (recs == null) continue;
                     SObject cso = recs.get(lrid);
                     if (cso == null) continue;
-                    String relName;                    
+                    String relName;                  
                     if (lf.toLowerCase().endsWith('id')) {
                         relName = lf.replaceAll('(?i)id$', '');
                     } else {

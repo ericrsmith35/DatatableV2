@@ -1,0 +1,7 @@
+@font-face {
+    font-family: 'Neutraface Display';
+    src: url('/assets/localdev/fonts/NeutrafaceDisplay.woff2') format('woff2'),
+        url('/assets/localdev/fonts/NeutrafaceDisplay.woff') format('woff');
+    font-weight: 700;
+    font-display: swap;
+}
