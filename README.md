@@ -32,7 +32,7 @@ Twitter: https://twitter.com/esmith35
 
 ## Release Notes
 07/01/20 -  Eric Smith -    Version 2.36 -  
-            Updates:        Now displays the primary "Name" field as a Link  
+            Updates:        Now displays the primary "Name" field as a Link (textWrap = true)
               
 06/30/20 -  Eric Smith -    Version 2.35 -  
             Updates:        Extended Configuration Mode to handle Column Alignments, Labels, Widths, Allow Edit & Allow Filter  

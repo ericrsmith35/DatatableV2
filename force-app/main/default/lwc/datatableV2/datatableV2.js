@@ -719,7 +719,7 @@ export default class DatatableV2 extends LightningElement {
                 this.typeAttrib.type = 'url';
                 fieldName = fieldName + '_lookup';
                 this.typeAttributes = { label: { fieldName: this.objectLinkField }, target: '_blank' };
-                this.cellAttributes = { wrapText : true };
+                this.cellAttributes.wrapText = true;
             }
 
             // Update CellAttribute attribute overrides by column
