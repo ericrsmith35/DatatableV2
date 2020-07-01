@@ -154,7 +154,11 @@ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVE
                     <lightning-pill label={columnLabelParameter} onremove={handleRemove} onclick={handleCopyLabels}></lightning-pill>
                 </div>
                 <div class="slds-box slds-m-vertical_xx-small">
-                    <p><span class="slds-text-heading_small">Column Widths:</span></p>
+                    <p><span class="slds-text-heading_small">Column Widths:
+                        <lightning-button
+                            label={roundValueLabel} variant="brand-outline" onclick={handleRoundWidths} class="slds-float_right">
+                        </lightning-button>
+                    </span></p>
                     <lightning-pill label={columnWidthParameter} onremove={handleRemove} onclick={handleCopyWidths}></lightning-pill>
                 </div>
                 <div class="slds-box slds-box_x-small slds-theme_alert-texture slds-m-vertical_xx-small">

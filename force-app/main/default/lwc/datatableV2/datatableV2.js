@@ -32,6 +32,7 @@ import getReturnResults from '@salesforce/apex/SObjectController2.getReturnResul
 import { FlowAttributeChangeEvent } from 'lightning/flowSupport';
 
 const MAXROWCOUNT = 1000;   // Limit the total number of records to be handled by this component
+const ROUNDWIDTH = 5;       // Used to round off the column widths during Config Mode to nearest value
 
 const MYDOMAIN = 'https://' + window.location.hostname.split('.')[0].replace('--c','');
 
@@ -82,9 +83,11 @@ export default class DatatableV2 extends LightningElement {
     @api sortDirection; 
     @api maxRowSelection;
     @api errors;
+    @api columnWidthValues;
     @track columns = [];
     @track mydata = [];
     @track selectedRows = [];
+    @track roundValueLabel;
 
     // Handle Lookup Field Variables   
     @api lookupId;
@@ -167,6 +170,9 @@ export default class DatatableV2 extends LightningElement {
         if (this.tableData.length > min) {
             this.tableData = [...this.tableData].slice(0,min);
         }
+
+        // Set roundValue for setting Column Widths in Config Mode
+        this.roundValueLabel = "Round to Nearest " + ROUNDWIDTH;
 
         // Get array of column field API names
         this.columnArray = (this.columnFields.length > 0) ? this.columnFields.replace(/\s/g, '').split(',') : [];
@@ -1052,8 +1058,21 @@ export default class DatatableV2 extends LightningElement {
 
     handleResize(event) {
         // Save the current column widths and update the config parameter
-        const sizes = event.detail.columnWidths;
-        // this.columnWidthParameter = sizes.join(', ');
+        this.columnWidthValues = event.detail.columnWidths;
+        this.setWidth(this.columnWidthValues);
+    }
+
+    handleRoundWidths() {
+        // Round the Width values to the nearest ROUNDWIDTH 
+        let widths = [];     
+        this.columnWidthValues.forEach(w => {
+            widths.push(Math.round(w/ROUNDWIDTH)*ROUNDWIDTH);
+        });
+        this.setWidth(widths);
+        this.columns = [...this.columns];
+    }
+
+    setWidth(sizes) {
         var colNum = 0;
         var colString = '';
         this.basicColumns.forEach(colDef => {
