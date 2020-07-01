@@ -1073,6 +1073,7 @@ export default class DatatableV2 extends LightningElement {
     }
 
     setWidth(sizes) {
+        // Update the column width values and the Config Mode parameter
         var colNum = 0;
         var colString = '';
         this.basicColumns.forEach(colDef => {
