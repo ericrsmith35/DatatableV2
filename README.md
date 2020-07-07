@@ -31,6 +31,9 @@ Twitter: https://twitter.com/esmith35
 ---
 
 ## Release Notes
+07/07/20 -  Eric Smith -    Version 2.37 -  
+            Bug Fix:        Fixed issue date being displayed as a day earlier   
+              
 07/01/20 -  Eric Smith -    Version 2.36 -  
             Updates:        Now displays the primary "Name" field as a Link (textWrap = true)  
                             Added button in Config Mode to round off Column Width values  
