@@ -16,6 +16,8 @@
  *              of the Name fields in the corresponding records. Return the
  *              records that now include both the Id and Name for each lookup.
  * 
+ * 07/07/20 -   Eric Smith -    Version 2.37    Fixed date displaying as a day earlier
+ * 
  * 07/01/20 -   Eric Smith -    Version 2.36    Added a return value for the "Name" field of the SObject
  *                                              This is used to display that field as a Link in the Datatable
  * 
@@ -93,7 +95,7 @@ public with sharing class SObjectController2 {
         List<String> noEditFields = new List<String>();
         List<String> timeFields = new List<String>();
         String objectLinkField = getNameUniqueField(objName);   // Name (link) Field for the Datatable SObject
-System.debug('*** OBJ/LINK' + objname + '/' + objectLinkField);
+        System.debug('*** OBJ/LINK' + objname + '/' + objectLinkField);
 
         for (String fieldName : fields.split(',')) {
 
@@ -254,7 +256,7 @@ System.debug('*** OBJ/LINK' + objname + '/' + objectLinkField);
                 return 'currency';
             }
             when 'DATE' {
-                return 'date';
+                return 'date-local';
             }
             when 'DATETIME' {
                 return 'datetime';   // Custom type for this component
