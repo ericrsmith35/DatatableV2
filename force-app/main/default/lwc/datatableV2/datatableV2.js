@@ -679,6 +679,7 @@ export default class DatatableV2 extends LightningElement {
             // Set default typeAttributes based on data type
             switch(type) {
                 case 'date':
+                case 'date-local':
                     this.typeAttributes = { year:'numeric', month:'numeric', day:'numeric' }
                     break;
                 case 'datetime':
@@ -1022,6 +1023,8 @@ export default class DatatableV2 extends LightningElement {
                 return 'text';
             case 'date':
                 return 'date';
+            case 'date-local':
+                return 'date';
             case 'datetime':
                 return 'datetime';
             case 'time':
@@ -1187,7 +1190,11 @@ export default class DatatableV2 extends LightningElement {
                             case 'number':
                             case 'currency':
                             case 'percent':
-                                if (row[fieldName] != this.columnFilterValues[col]) {    // Check for exact match on numeric fields
+                            case 'date':
+                            case 'date-local':
+                            case 'datetime':
+                            case 'time':
+                                if (row[fieldName] != this.columnFilterValues[col]) {    // Check for exact match on numeric and date fields
                                     match = false;
                                     break;                                
                                 }

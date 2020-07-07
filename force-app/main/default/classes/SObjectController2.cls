@@ -93,7 +93,7 @@ public with sharing class SObjectController2 {
         List<String> noEditFields = new List<String>();
         List<String> timeFields = new List<String>();
         String objectLinkField = getNameUniqueField(objName);   // Name (link) Field for the Datatable SObject
-System.debug('*** OBJ/LINK' + objname + '/' + objectLinkField);
+        System.debug('*** OBJ/LINK' + objname + '/' + objectLinkField);
 
         for (String fieldName : fields.split(',')) {
 
@@ -254,7 +254,7 @@ System.debug('*** OBJ/LINK' + objname + '/' + objectLinkField);
                 return 'currency';
             }
             when 'DATE' {
-                return 'date';
+                return 'date-local';
             }
             when 'DATETIME' {
                 return 'datetime';   // Custom type for this component
