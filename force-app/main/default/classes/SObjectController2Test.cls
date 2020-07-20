@@ -25,4 +25,15 @@ public with sharing class SObjectController2Test {
         System.assert(testEmpty.contains('"objectName":"EmptyCollection"'));
     }
 
+    static testMethod void testSObjectId() {
+        SObjectController2.SObjectIdRequests req = new SObjectController2.SObjectIdRequests();
+        req.sObjectName = 'Account';
+        req.counter = 0;
+
+        List<SObjectController2.SObjectIdResults> results = SObjectController2.generateSObjectId(new List<SObjectController2.SObjectIdRequests>{req});
+        Id accntId = results[0].sobjectId;
+
+        System.assertEquals('001', String.valueOf(accntId).left(3));
+    }    
+
 }

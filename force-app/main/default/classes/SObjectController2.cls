@@ -243,6 +243,46 @@ public with sharing class SObjectController2 {
         return curRR;
     }
 
+	/**
+	 * Generate a fake Salesforce Id for the given SObjectType
+     * Copyright (c) 2014, FinancialForce.com, inc
+     * All rights reserved.
+     * Adopted from FinancialForce.com, inc
+     * Original class can be found here: https://github.com/SonarSource/apex-test-sources/blob/master/projects/fflib-apex-mocks/src/classes/fflib_IDGenerator.cls
+	 */  
+    @InvocableMethod(label='Generate SObject Id' description='Generate Virtual Record Id for SObject')
+	public static List<SObjectIdResults> generateSObjectId(List<SObjectIdRequests> requests)
+	{
+        final String ID_PATTERN = '000000000000';
+
+        String objName = requests[0].sObjectName;
+        schema.sObjectType sObjType = Schema.getGlobalDescribe().get(objName);
+        String keyPrefix = sObjType.getDescribe().getKeyPrefix();        
+
+        Integer offSet = requests[0].counter;
+		offSet++;
+
+		String fakeIdPrefix = ID_PATTERN.substring(0, 12 - offSet.format().length());
+
+        SObjectIdResults result = new SObjectIdResults();
+        result.sobjectId = Id.valueOf(keyPrefix + fakeIdPrefix + offSet);
+        return new List<SObjectIdResults>{result};
+    }
+    
+	public class SObjectIdRequests
+    {
+		@InvocableVariable(label='Current Counter' description='Counter which is used to generate the virtual record Id' required=true)
+		public Integer counter;
+		@InvocableVariable(label='Object API Name' description='API Name of Object' required=true)
+        public String sObjectName;
+	}
+
+    public class SObjectIdResults
+    {
+      @InvocableVariable(label='Generated Id' description='Virtual Record Id' required=true)
+      public Id sobjectId;
+	}        
+
     public class MyApexException extends Exception {
     }
 
