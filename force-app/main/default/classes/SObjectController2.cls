@@ -288,6 +288,9 @@ public with sharing class SObjectController2 {
             when 'URL' {
                 return 'url';
             }
+            when 'CHECKBOX' {
+                return 'checkbox';
+            }
             when else {
                 // throw new MyApexException ('you\'ve specified the unsupported field type: ' + apexType );
                 return 'text';
