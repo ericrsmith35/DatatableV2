@@ -31,6 +31,12 @@ Twitter: https://twitter.com/esmith35
 ---
 
 ## Release Notes
+07/31/20 -  Eric Smith -    Version 2.39 - 
+            Updates:        Added Datatable Configuration Helper Flow
+              
+07/31/20 -  Andy Hass -     Version 2.38 -
+            Updates:        Added support for Checkbox Field Type
+              
 07/07/20 -  Eric Smith -    Version 2.37 -  
             Bug Fix:        Fixed issue date being displayed as a day earlier   
               
