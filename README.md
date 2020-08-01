@@ -22,7 +22,7 @@ Blog: https://ericsplayground.wordpress.com/blog/
 Twitter: https://twitter.com/esmith35  
 
 ---
-**You must install these components FIRST** 
+**You must install these components FIRST  **   
 Flow Base Components (https://unofficialsf.com/introducing-flowbasecomponents/)  
 Dual List Box (https://unofficialsf.com/duallistbox/)    
   
