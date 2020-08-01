@@ -22,7 +22,10 @@ Blog: https://ericsplayground.wordpress.com/blog/
 Twitter: https://twitter.com/esmith35  
 
 ---
-
+You must install these components FIRST  
+Flow Base Components (https://unofficialsf.com/introducing-flowbasecomponents/)  
+Dual List Box (https://unofficialsf.com/duallistbox/)    
+  
 <a href="https://githubsfdeploy.herokuapp.com">
   <img alt="Deploy to Salesforce"
        src="https://raw.githubusercontent.com/afawcett/githubsfdeploy/master/deploy.png">
