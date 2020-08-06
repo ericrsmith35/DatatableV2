@@ -185,7 +185,7 @@ export default class DatatableV2 extends LightningElement {
                 this.basicColumns.push({
                     label: field,
                     fieldName: field,
-                    type: 'text',
+                    type: 'richtext',
                     scale: 0
                 });
             })
