@@ -106,7 +106,7 @@ export default class DatatableV2 extends LightningElement {
     @track columnFilterValue = null;
     @track isOpenFilterInput = false;
     @track inputLabel;
-    @track inputType = 'text';
+    @track inputType = 'richtext';
     @track inputFormat = null;    
 
     // Component working variables
@@ -594,7 +594,7 @@ export default class DatatableV2 extends LightningElement {
                     case 'time':
                         editAttrib.edit = false;
                         break;
-                    case 'text':
+                    case 'richtext':
                         if (this.noEditFieldArray.indexOf(fieldName) != -1) editAttrib.edit = false;
                         break;
                     default:
@@ -981,7 +981,7 @@ export default class DatatableV2 extends LightningElement {
             case 'label':   // Config Mode Only
                 this.columnFilterValue = this.columnFilterValues[this.columnNumber];
                 this.columnFilterValue = (this.columnFilterValue) ? this.columnFilterValue : this.baseLabel;
-                this.columnType = 'text';
+                this.columnType = 'richtext';
                 this.inputType = this.convertType(this.columnType);
                 this.inputFormat = (this.inputType == 'number') ? this.convertFormat(this.columnType) : null;
                 this.handleOpenFilterInput();
