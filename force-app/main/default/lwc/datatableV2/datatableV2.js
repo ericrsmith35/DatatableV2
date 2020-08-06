@@ -1042,7 +1042,7 @@ export default class DatatableV2 extends LightningElement {
             case 'percent':
                 return 'number';
             default:
-                return 'text';
+                return 'richtext';
         }
     }
 
