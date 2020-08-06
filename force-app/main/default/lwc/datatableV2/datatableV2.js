@@ -290,7 +290,8 @@ export default class DatatableV2 extends LightningElement {
             parseTypes.forEach(type => {
                 this.types.push({
                     column: this.columnReference(type),
-                    type: this.columnValue(type)
+                    type: if(this.columnValue(type)=="text") {"richtext"}
+                            else {this.columnValue(type)};
                 });
                 console.log('*UD type',type);
                 this.basicColumns[this.columnReference(type)].type = this.columnValue(type);
@@ -426,7 +427,12 @@ export default class DatatableV2 extends LightningElement {
                         this.lookupFieldArray.push(this.basicColumns[t.column].fieldName);
                         this.lookups.push(this.basicColumns[t.column].fieldName); 
                         this.basicColumns[t.column].type = 'lookup';         
-                }
+                        break;
+                        case 'text':
+                            this.lookupFieldArray.push(this.basicColumns[t.column].fieldName);
+                            this.lookups.push(this.basicColumns[t.column].fieldName); 
+                            this.basicColumns[t.column].type = 'richtext';         
+                    }
             });
 
             // Update row data for lookup, time and percent fields
