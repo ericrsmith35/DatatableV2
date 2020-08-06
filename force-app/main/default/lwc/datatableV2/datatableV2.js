@@ -114,7 +114,7 @@ export default class DatatableV2 extends LightningElement {
     @track columnFilterValue = null;
     @track isOpenFilterInput = false;
     @track inputLabel;
-    @track inputType = 'richtext';
+    @track inputType = 'text';
     @track inputFormat = null;    
 
     // Component working variables
@@ -607,7 +607,7 @@ export default class DatatableV2 extends LightningElement {
                     case 'time':
                         editAttrib.edit = false;
                         break;
-                    case 'richtext':
+                    case 'text':
                         if (this.noEditFieldArray.indexOf(fieldName) != -1) editAttrib.edit = false;
                         break;
                     default:
@@ -730,7 +730,7 @@ export default class DatatableV2 extends LightningElement {
                     fieldName = lufield + '_lookup';
                     this.typeAttributes = { label: { fieldName: lufield + '_name' }, target: '_blank' };
                 } else {
-                    this.typeAttrib.type = 'text';      // Non reparentable Master-Detail fields are not supported
+                    this.typeAttrib.type = 'richtext';      // Non reparentable Master-Detail fields are not supported
                 }
             }
 
@@ -1054,7 +1054,9 @@ export default class DatatableV2 extends LightningElement {
                 return 'number';
             case 'percent':
                 return 'number';
-            default:
+                case 'text':
+                    return 'richtext';
+                default:
                 return 'richtext';
         }
     }
