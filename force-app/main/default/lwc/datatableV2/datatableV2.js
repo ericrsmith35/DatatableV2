@@ -290,8 +290,7 @@ export default class DatatableV2 extends LightningElement {
             parseTypes.forEach(type => {
                 this.types.push({
                     column: this.columnReference(type),
-                    type: if(this.columnValue(type)=="text") {"richtext"}
-                            else {this.columnValue(type)};
+                    type: this.columnValue(type)
                 });
                 console.log('*UD type',type);
                 this.basicColumns[this.columnReference(type)].type = this.columnValue(type);
