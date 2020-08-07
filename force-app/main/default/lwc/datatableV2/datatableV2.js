@@ -708,6 +708,7 @@ export default class DatatableV2 extends LightningElement {
                     }
                     break;
                 default:
+		    type = 'richtext'
             }
 
             // Change lookup to url and reference the new fields that will be added to the datatable object
@@ -1046,9 +1047,9 @@ export default class DatatableV2 extends LightningElement {
                 return 'number';
             case 'percent':
                 return 'number';
-                case 'text':
+            case 'text':
                     return 'richtext';
-                default:
+            default:
                 return 'richtext';
         }
     }
