@@ -8,7 +8,7 @@ import richTextColumnType from "./richTextColumnType.html";
 export default class richDatatable extends LightningDatatable {
     static customTypes={
         // custom type definition
-        richText: {
+        richtext: {
             template: richTextColumnType,
             standardCellLayout: true
         }
