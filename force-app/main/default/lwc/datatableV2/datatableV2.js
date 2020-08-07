@@ -30,7 +30,6 @@
 import { LightningElement, api, track, wire } from 'lwc';
 import getReturnResults from '@salesforce/apex/SObjectController2.getReturnResults';
 import { FlowAttributeChangeEvent } from 'lightning/flowSupport';
-import richTextColumnType from "./richTextColumnType.html";
 
 const MAXROWCOUNT = 1000;   // Limit the total number of records to be handled by this component
 const ROUNDWIDTH = 5;       // Used to round off the column widths during Config Mode to nearest value
