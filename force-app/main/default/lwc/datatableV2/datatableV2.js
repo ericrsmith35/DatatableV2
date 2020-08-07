@@ -699,6 +699,10 @@ export default class DatatableV2 extends LightningElement {
                     break;
                 case 'currency':
                 case 'number':
+		case 'text':
+		    type = 'richtext';
+		    this.typeAttrib.type = 'richtext';    
+		    break;
                 case 'percent':
                     if (this.isUserDefinedObject) {
                         let minDigits = (this.scaleAttrib) ? this.scaleAttrib.scale : scale;
@@ -708,7 +712,9 @@ export default class DatatableV2 extends LightningElement {
                     }
                     break;
                 default:
-		    type = 'richtext'
+		    type = 'richtext';
+		    this.typeAttrib.type = 'richtext';
+			    
             }
 
             // Change lookup to url and reference the new fields that will be added to the datatable object
