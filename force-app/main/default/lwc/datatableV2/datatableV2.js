@@ -38,14 +38,7 @@ const ROUNDWIDTH = 5;       // Used to round off the column widths during Config
 const MYDOMAIN = 'https://' + window.location.hostname.split('.')[0].replace('--c','');
 
 export default class DatatableV2 extends LightningElement {
-    static customTypes={
-        // custom type definition
-        richtext: {
-            template: richTextColumnType,
-            standardCellLayout: true
-        }
-    }
-    
+	
     // Component Input & Output Attributes
     @api tableData = [];
     @api columnFields;
