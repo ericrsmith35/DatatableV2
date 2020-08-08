@@ -5,9 +5,6 @@
         "paths": {
             "c/datatableV2": [
                 "datatableV2/datatableV2.js"
-            ],
-            "c/datatableV2Spring20": [
-                "datatableV2Spring20/datatableV2Spring20.js"
             ]
         }
     },
