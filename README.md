@@ -40,8 +40,10 @@ Job Status: Error: "IO Exception: Unauthorized endpoint, please check Setup->Sec
 To address this, copy the root url from the error message and go to Setup –> Remote Site Settings and create a new setting.
 
 ![Remote Site Setting](RemoteSiteSetting.PNG?raw=true)
----
+    
+This configures your org to essentially allow applications to run that call out to the internet and then back into the same org via its API endpoints.
 
+---
 ## Release Notes
 07/31/20 -  Eric Smith -    Version 2.39 -   
             Updates:        Added Datatable Configuration Helper Flow  
