@@ -49,7 +49,8 @@ This configures your org to essentially allow applications to run that call out 
 07/31/20 -  Eric Smith -    Version 2.39 -   
             Updates:        Added Datatable Configuration Helper Flow  
             REQUIRES:       Flow Base Components (https://unofficialsf.com/introducing-flowbasecomponents/)  
-            REQUIRES:       Dual List Box (https://unofficialsf.com/duallistbox/)  
+            REQUIRES:       Dual List Box (https://unofficialsf.com/duallistbox/) 
+            REQUIRES:       Remote Site Setting (Setup)
                   
 07/31/20 -  Andy Hass -     Version 2.38 -  
             Updates:        Added support for Checkbox Field Type
