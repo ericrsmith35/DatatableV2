@@ -6,10 +6,11 @@ Lightning Web Component for Flow Screens:       **datatableV2**
 
 Additional components packaged with this LWC:
 
-                    Lightning Web Components:   datatableV2Spring20 (temporary version for hardcoded SObjects)   
-
-                    Apex Classes:               SObjectController2 
-                                                SObjectController2Test  
+                    Apex Classes:   SObjectController2 
+                                    SObjectController2Test
+                            
+                    Flows:          Datatable Configuration Helper
+                                    Datatable Configuration Helper - Temp SubFlow
                                                   
 **Documentation:**  https://unofficialsf.com/datatablev2-lightning-web-component-for-flow-screens/  
   
@@ -22,7 +23,7 @@ Blog: https://ericsplayground.wordpress.com/blog/
 Twitter: https://twitter.com/esmith35  
 
 ---
-**You must install these components FIRST**     
+**You must install these components FIRST in order to use the Datatable Configuration Helper Flow**     
 Flow Base Components (https://unofficialsf.com/introducing-flowbasecomponents/)  
 Dual List Box (https://unofficialsf.com/duallistbox/)    
   
@@ -32,7 +33,7 @@ Dual List Box (https://unofficialsf.com/duallistbox/)
 </a>
     
 ---    
-Because this component uses Metadata APIs, you’ll need to have a Remote Site Setting on the org. If you don’t, you’ll see an error like this:
+Because the Datatable Configuration Helper uses Metadata APIs, you’ll need to have a Remote Site Setting on the org. If you don’t, you’ll see an error like this:
     
 `Metadata Transfer
 Job Status: Error: "IO Exception: Unauthorized endpoint, please check Setup->Security->Remote site settings. endpoint = https://test35-dev-ed--c.visualforce.com/services/Soap/m/42.0"`
