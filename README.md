@@ -30,7 +30,15 @@ Dual List Box (https://unofficialsf.com/duallistbox/)
   <img alt="Deploy to Salesforce"
        src="https://raw.githubusercontent.com/afawcett/githubsfdeploy/master/deploy.png">
 </a>
+    
+Because this component uses Metadata APIs, you’ll need to have a Remote Site Setting on the org. If you don’t, you’ll see an error like this:
+    
+Metadata Transfer
+Job Status: Error: "IO Exception: Unauthorized endpoint, please check Setup->Security->Remote site settings. endpoint = https://test35-dev-ed--c.visualforce.com/services/Soap/m/42.0"
+    
+To address this, copy the root url from the error message and go to Setup –> Remote Site Settings and create a new setting.
 
+This configures your org to essentially allow applications to run that call out to the internet and then back into the same org via its API endpoints.
 ---
 
 ## Release Notes
