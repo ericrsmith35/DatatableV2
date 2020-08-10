@@ -32,6 +32,10 @@ Dual List Box (https://unofficialsf.com/duallistbox/)
        src="https://raw.githubusercontent.com/afawcett/githubsfdeploy/master/deploy.png">
 </a>
     
+To just install datatableV2 without the Configuration helper, use these links:
+Production/Developer: https://login.salesforce.com/packaging/installPackage.apexp?p0=04t3t000001zBG6
+Sandbox: https://test.salesforce.com/packaging/installPackage.apexp?p0=04t3t000001zBG6
+
 ---    
 Because the Datatable Configuration Helper uses Metadata APIs, you’ll need to have a Remote Site Setting on the org. If you don’t, you’ll see an error like this:
     
