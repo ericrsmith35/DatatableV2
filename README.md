@@ -51,6 +51,10 @@ This configures your org to essentially allow applications to run that call out 
 
 ---
 ## Release Notes
+08/11/20 -  Eric Smith -    Version 2.40 -  
+            Updates:        Added attribute to allow the suppression of the record link on the SObject's 'Name' field  
+            Bug Fix:        Fixed code so the 'Name' Field column now sorts correctly  
+              
 07/31/20 -  Eric Smith -    Version 2.39 -   
             Updates:        Added Datatable Configuration Helper Flow  
             REQUIRES:       Flow Base Components (https://unofficialsf.com/introducing-flowbasecomponents/)  
