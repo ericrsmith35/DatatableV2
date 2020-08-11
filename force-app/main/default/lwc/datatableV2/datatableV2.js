@@ -1,7 +1,7 @@
 /**
  * Lightning Web Component for Flow Screens:       datatableV2
  * 
- * VERSION:             2.36
+ * VERSION:             2.40
  * 
  * RELEASE NOTES:       https://github.com/ericrsmith35/DatatableV2/blob/master/README.md
  * 
@@ -58,6 +58,7 @@ export default class DatatableV2 extends LightningElement {
     @api hideCheckboxColumn;
     @api singleRowSelection;
     @api suppressBottomBar = false;
+    @api suppressNameFieldLink = false;
     @api tableHeight;
     @api outputSelectedRows = [];
     @api outputEditedRows = [];
@@ -521,6 +522,7 @@ export default class DatatableV2 extends LightningElement {
             }); 
             
             // Handle Lookup for the SObject's "Name" Field
+            record[this.objectLinkField + '_name'] = record[this.objectLinkField];
             record[this.objectLinkField + '_lookup'] = MYDOMAIN + '.lightning.force.com/lightning/r/' + this.objectName + '/' + record['Id'] + '/view';
 
             // If needed, add more fields to datatable records
@@ -722,7 +724,7 @@ export default class DatatableV2 extends LightningElement {
             }
 
             // Switch the SObject's "Name" Field to a Lookup
-            if (fieldName == this.objectLinkField) {
+            if (fieldName == this.objectLinkField && !this.suppressNameFieldLink) {
                 this.typeAttrib.type = 'url';
                 fieldName = fieldName + '_lookup';
                 this.typeAttributes = { label: { fieldName: this.objectLinkField }, target: '_blank' };

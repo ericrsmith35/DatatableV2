@@ -9,9 +9,8 @@
     </targets>
     <targetConfigs>
         <targetConfig targets="lightning__FlowScreen">
-
-            <!-- ================================ New in Summer '20' - Support for Dynamic SObject Selection ================================= -->
-
+            <!-- ================================ New in Summer '20' - Support for Dynamic SObject Selection ================================= -->  
+              
             <propertyType name="T" extends="SObject" label="Datatable Object API Name" description="Select the API Name of the SObject to use in the Datatable"/>
             <property name="tableData" label="_ Datatable Record Collection" type="{T[]}" role="inputOnly" description="Record Collection variable containing the records to display in the datatable."/>
             <property name="preSelectedRows" label="Pre-Selected Rows" type="{T[]}" role="inputOnly" description="Record Collection variable containing the records to show as pre-selected in the datatable."/>
@@ -19,19 +18,19 @@
                      - NOTE: To write these edits back to the Object, you will need to do a Record Update in the Flow."/>
             <property name="outputSelectedRows" label="Output Selected Rows" type="{T[]}" role="outputOnly" description="Record Collection variable to contain only the records that were selected in the datatable. 
                      - NOTE: These records may not contain all of the edited values."/>
-
-            <!-- ============== These parameters are used when providing a User Defined object rather than a Salesforce SObject ============== -->
-
+                       
+            <!-- ============== These parameters are used when providing a User Defined object rather than a Salesforce SObject ============== -->  
+              
             <property name="isUserDefinedObject" label="_ (User Defined)  Display User Defined Object?" type="Boolean" default="false" role="inputOnly" description="Set to True if you are providing a User Defined object rather than a Salesforce SObject."/>
             <property name="tableDataString" label="_ Datatable Record String (User Defined)" type="String" role="inputOnly" description="Object Collection string variable containing the records to display in the datatable."/>
             <property name="preSelectedRowsString" label="Pre-Selected Rows (User Defined)" type="String" role="inputOnly" description="Object Collection string variable containing the records to show as pre-selected in the datatable."/>
             <property name="outputSelectedRowsString" label="Output Selected Rows (User Defined)" type="String" role="outputOnly" description="Object Collection string variable to contain only the records that were selected in the datatable. 
                   --  NOTE: These records may not contain all of the edited values."/>
             <property name="outputEditedRowsString" label="Output Edited Rows (User Defined)" type="String" role="outputOnly" description="Object Collection string variable to contain only the records that were edited in the datatable."/>
-            
-            <!-- ============================================================================================================================- -->
-
-            <!-- Forcing sort order of parameters with special characters _(1) -(2) .(3) -->
+              
+            <!-- ============================================================================================================================- -->  
+              
+            <!-- Forcing sort order of parameters with special characters _(1) -(2) .(3) -->  
             <property name="columnFields" label="_ Column Fields" type="String" role="inputOnly" description="REQUIRED: Comma separated list of field API Names to display in the datatable."/>
             <property name="columnAlignments" label="- Column Alignments (Col#:alignment,...)" type="String" role="inputOnly" description="Comma separated list of ColID:Alignment Value (left,center,right).  
                   --  NOTE: ColIDs can be either the column number or the field API Name"/>
@@ -63,8 +62,9 @@
                 The default (False) will display Checkboxes and allow multiple records to be selected."/>
             <property name="suppressBottomBar" label="Suppress Cancel/Save Buttons during Edit Mode?" type="Boolean" default="false" role="inputOnly" description="Cancel/Save buttons will appear by default at the very bottom of the table once a field is edited.  
                 When hiding these buttons, field updates will be applied as soon as the user Tabs out or selects a different field."/>
+            <property name="suppressNameFieldLink" label="Suppress the Link on the Object's 'Name' Field" type="Boolean" default="false" role="inputOnly" description="Suppress the default behavior of displaying the SObject's 'Name' field as a link to the record"/>
             <property name="tableHeight" label="Table Height" type="String" role="inputOnly" description="CSS specification for the height of the datatable (Examples: 30rem, calc(50vh - 100px)  If you leave this blank, the datatable will expand to display all records.)"/>
-            <property name="tableBorder" label="Table Border" type="Boolean" default="true" role="inputOnly" description="Display a border around the datatable."/>   
-      </targetConfig>
+            <property name="tableBorder" label="Table Border" type="Boolean" default="true" role="inputOnly" description="Display a border around the datatable."/>
+        </targetConfig>
     </targetConfigs>
 </LightningComponentBundle>
