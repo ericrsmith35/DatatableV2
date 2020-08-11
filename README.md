@@ -23,9 +23,9 @@ Blog: https://ericsplayground.wordpress.com/blog/
 Twitter: https://twitter.com/esmith35  
 
 ---
-**To just install datatableV2 without the Configuration helper, use these links:**  
-Production/Developer: https://login.salesforce.com/packaging/installPackage.apexp?p0=04t3t000001zBG6  
-Sandbox: https://test.salesforce.com/packaging/installPackage.apexp?p0=04t3t000001zBG6  
+**To just install datatableV2 without the Configuration helper, use these links: (v2.40)**  
+Production/Developer: https://login.salesforce.com/packaging/installPackage.apexp?p0=04t3t000001zBOR  
+Sandbox: https://test.salesforce.com/packaging/installPackage.apexp?p0=04t3t000001zBOR  
 
 ---
 **You must install these components FIRST in order to use the Datatable Configuration Helper Flow**     
