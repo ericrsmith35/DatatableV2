@@ -24,8 +24,8 @@ Twitter: https://twitter.com/esmith35
 
 ---
 **To just install datatableV2 without the Configuration helper, use these links: (v2.40)**  
-Production/Developer: https://login.salesforce.com/packaging/installPackage.apexp?p0=04t3t000001zBOR  
-Sandbox: https://test.salesforce.com/packaging/installPackage.apexp?p0=04t3t000001zBOR  
+Production/Developer: https://login.salesforce.com/packaging/installPackage.apexp?p0=04t3t0000020wPo  
+Sandbox: https://test.salesforce.com/packaging/installPackage.apexp?p0=04t3t0000020wPo  
 
 ---
 **You must install these components FIRST in order to use the Datatable Configuration Helper Flow**     
@@ -51,6 +51,9 @@ This configures your org to essentially allow applications to run that call out 
 
 ---
 ## Release Notes
+08/14/20 -  Eric Smith -    Version 2.41 -     
+            Bug Fix:        Fixed issue with time and date-time fields being displayed as a day earlier     
+               
 08/11/20 -  Eric Smith -    Version 2.40 -  
             Updates:        Added attribute to allow the suppression of the record link on the SObject's 'Name' field  
             Bug Fix:        Fixed code so the 'Name' Field column now sorts correctly  
