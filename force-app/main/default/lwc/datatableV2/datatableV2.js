@@ -1,7 +1,7 @@
 /**
  * Lightning Web Component for Flow Screens:       datatableV2
  * 
- * VERSION:             2.40
+ * VERSION:             2.41
  * 
  * RELEASE NOTES:       https://github.com/ericrsmith35/DatatableV2/blob/master/README.md
  * 
@@ -685,12 +685,12 @@ export default class DatatableV2 extends LightningElement {
                     this.typeAttributes = { year:'numeric', month:'numeric', day:'numeric' }
                     break;
                 case 'datetime':
-                    type = 'date';
+                    type = 'date-local';
                     this.typeAttrib.type = type;
                     this.typeAttributes = { year:'numeric', month:'numeric', day:'numeric', hour:'2-digit', minute:'2-digit', timeZoneName:'short' };
                     break;           
                 case 'time':
-                    type = 'date';
+                    type = 'date-local';
                     this.typeAttrib.type = type;
                     this.typeAttributes = { hour:'2-digit', minute:'2-digit', timeZoneName:'short' };
                     break;
