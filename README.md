@@ -51,6 +51,9 @@ This configures your org to essentially allow applications to run that call out 
 
 ---
 ## Release Notes
+08/26/20 -  Eric Smith -    Version 2.42 -  
+            Bug Fix:        Update Time fields with the User's Timezone Offset value so they display as intended  
+                
 08/14/20 -  Eric Smith -    Version 2.41 -     
             Bug Fix:        Fixed issue with time and date-time fields being displayed as a day earlier     
                
