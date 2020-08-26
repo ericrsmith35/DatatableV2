@@ -16,6 +16,8 @@
  *              of the Name fields in the corresponding records. Return the
  *              records that now include both the Id and Name for each lookup.
  * 
+ * 08/26/20 -   Eric Smith -    Version 2.42    Get and return User's Timezone Offset so Time fields can be adjusted
+ * 
  * 07/07/20 -   Eric Smith -    Version 2.37    Fixed date displaying as a day earlier
  * 
  * 07/01/20 -   Eric Smith -    Version 2.36    Added a return value for the "Name" field of the SObject
@@ -50,6 +52,7 @@ public with sharing class SObjectController2 {
         list<String> timeFieldList;
         String objectName;
         String objectLinkField;
+        String timezoneOffset;
     }
 
     @AuraEnabled
@@ -76,6 +79,7 @@ public with sharing class SObjectController2 {
             curRR = getRowData(curRR, records, curRR.dataMap, curRR.objNameFieldMap, curRR.lookupFieldList, curRR.percentFieldList, objName);
             curRR.objectName = objName;
         }
+        curRR.timezoneOffset = getTimezoneOffset().format();
         System.Debug('curRR - '+JSON.serializePretty(curRR));
         return JSON.serialize(curRR);  
     }
@@ -335,6 +339,12 @@ public with sharing class SObjectController2 {
             }
         }
         return strResult;
+    }
+
+    // Get the offset value between GMT and the running User's timezone
+    private static integer getTimezoneOffset() {
+        Datetime dtNow = Datetime.now();
+        return UserInfo.getTimezone().getOffset(dtNow);
     }
 
 }

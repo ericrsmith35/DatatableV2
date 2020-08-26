@@ -1,7 +1,7 @@
 /**
  * Lightning Web Component for Flow Screens:       datatableV2
  * 
- * VERSION:             2.41
+ * VERSION:             2.42
  * 
  * RELEASE NOTES:       https://github.com/ericrsmith35/DatatableV2/blob/master/README.md
  * 
@@ -141,6 +141,7 @@ export default class DatatableV2 extends LightningElement {
     @api cols = [];
     @api attribCount = 0;
     @api recordData = [];
+    @api timezoneOffset = 0;
     @track showSpinner = true;
     @track borderClass;
     @track columnFieldParameter;
@@ -453,6 +454,7 @@ export default class DatatableV2 extends LightningElement {
                 this.objectName = returnResults.objectName;
                 this.objectLinkField = returnResults.objectLinkField;
                 this.lookupFieldArray = JSON.parse('[' + returnResults.lookupFieldData + ']');
+                this.timezoneOffset = returnResults.timezoneOffset.replace(/,/g, '');
 
                 // Basic column info (label, fieldName, type) taken from the Schema in Apex
                 this.dtableColumnFieldDescriptorString = '[' + returnResults.dtableColumnFieldDescriptorString + ']';
@@ -492,9 +494,14 @@ export default class DatatableV2 extends LightningElement {
 
         data.forEach(record => {
 
-            // Prepend a date to the Time field so it can be displayed
+            // Prepend a date to the Time field so it can be displayed and calculate offset based on User's timezone
             timeFields.forEach(time => {
-                record[time] = "2020-05-12T" + record[time];
+                if (record[time]) {
+                    record[time] = "2020-05-12T" + record[time];
+                    let dt = Date.parse(record[time]);
+                    let d = new Date();
+                    record[time] = d.setTime(Number(dt) - Number(this.timezoneOffset));
+                }
             });
 
             // Flatten returned data
@@ -685,12 +692,12 @@ export default class DatatableV2 extends LightningElement {
                     this.typeAttributes = { year:'numeric', month:'numeric', day:'numeric' }
                     break;
                 case 'datetime':
-                    type = 'date-local';
+                    type = 'date';
                     this.typeAttrib.type = type;
                     this.typeAttributes = { year:'numeric', month:'numeric', day:'numeric', hour:'2-digit', minute:'2-digit', timeZoneName:'short' };
                     break;           
                 case 'time':
-                    type = 'date-local';
+                    type = 'date';
                     this.typeAttrib.type = type;
                     this.typeAttributes = { hour:'2-digit', minute:'2-digit', timeZoneName:'short' };
                     break;
