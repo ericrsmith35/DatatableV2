@@ -1,7 +1,7 @@
 /**
  * Lightning Web Component for Flow Screens:       datatableV2
  * 
- * VERSION:             2.42
+ * VERSION:             2.43
  * 
  * RELEASE NOTES:       https://github.com/ericrsmith35/DatatableV2/blob/master/README.md
  * 
@@ -490,6 +490,7 @@ export default class DatatableV2 extends LightningElement {
         let lookupFields = this.lookups;
         let lufield = '';
         let timeFields = this.timeFieldArray;
+        let percentFields = this.percentFieldArray;
         let lookupFieldObject = '';
 
         data.forEach(record => {
@@ -502,6 +503,11 @@ export default class DatatableV2 extends LightningElement {
                     let d = new Date();
                     record[time] = d.setTime(Number(dt) - Number(this.timezoneOffset));
                 }
+            });
+
+            // Store percent field data as value/100
+            percentFields.forEach(pct => {
+                record[pct] = record[pct]/100;
             });
 
             // Flatten returned data
@@ -603,10 +609,8 @@ export default class DatatableV2 extends LightningElement {
                     case 'time':
                         editAttrib.edit = false;
                         break;
-                    case 'text':
-                        if (this.noEditFieldArray.indexOf(fieldName) != -1) editAttrib.edit = false;
-                        break;
                     default:
+                        if (this.noEditFieldArray.indexOf(fieldName) != -1) editAttrib.edit = false;
                 }
             }
 
@@ -856,11 +860,10 @@ export default class DatatableV2 extends LightningElement {
             if (edraft != undefined) {
                 let efieldNames = Object.keys(edraft);
                 efieldNames.forEach(ef => {
-                    if(this.percentFieldArray.indexOf(ef) != -1) {
-                        eitem[ef] = Number(edraft[ef])*100; // Percent field
-                    } else {
-                        eitem[ef] = edraft[ef];
-                    }
+                    // if(this.percentFieldArray.indexOf(ef) != -1) {
+                    //     eitem[ef] = Number(edraft[ef])*100; // Percent field
+                    // }
+                    eitem[ef] = edraft[ef];
                 });
 
                 // Add/update edited record to output collection
