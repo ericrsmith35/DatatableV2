@@ -16,6 +16,8 @@
  *              of the Name fields in the corresponding records. Return the
  *              records that now include both the Id and Name for each lookup.
  * 
+ * 09/01/20 -   Eric Smith -    Version 2.43    Update Percent Field Handling and set Formula Fields to be Non-Editable 
+ * 
  * 08/26/20 -   Eric Smith -    Version 2.42    Get and return User's Timezone Offset so Time fields can be adjusted
  * 
  * 07/07/20 -   Eric Smith -    Version 2.37    Fixed date displaying as a day earlier
@@ -126,9 +128,7 @@ public with sharing class SObjectController2 {
                     }
                 }
                 when 'PERCENT' {
-                    if (!noEditFields.contains(fieldname)) {
-                        percentFields.add(fieldName);
-                    }
+                    percentFields.add(fieldName);
                 }
                 when 'TEXTAREA' {
                     if (!dfr.isSortable() && !noEditFields.contains(fieldname)) {
@@ -213,11 +213,11 @@ public with sharing class SObjectController2 {
         for(SObject so : records) {   
             
             // Divide percent field values by 100
-            for(String pf : percentFields) {
-                if(so.get(pf) != null && !noEditFields.contains(pf)) {
-                    so.put(pf, double.valueOf(so.get(pf))/100);
-                }
-            }
+            // for(String pf : percentFields) {
+            //     if(so.get(pf) != null && !noEditFields.contains(pf)) {
+            //         so.put(pf, double.valueOf(so.get(pf))/100);
+            //     }
+            // }
 
             // Add new lookup field values 
             for(String lf : lookupFields) {         

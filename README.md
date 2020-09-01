@@ -51,6 +51,9 @@ This configures your org to essentially allow applications to run that call out 
 
 ---
 ## Release Notes
+09/01/20 -  Eric Smith -    Version 2.43 -  
+            Bug Fix:        Update Percent Field Handling and set Formula Fields to be Non-Editable  
+              
 08/26/20 -  Eric Smith -    Version 2.42 -  
             Bug Fix:        Update Time fields with the User's Timezone Offset value so they display as intended  
             Bug Fix:        Fix field type so Datetime fields display correctly    
