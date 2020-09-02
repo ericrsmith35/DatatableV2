@@ -16,6 +16,10 @@
  *              of the Name fields in the corresponding records. Return the
  *              records that now include both the Id and Name for each lookup.
  * 
+ * 09/01/20 -   Eric Smith -    Version 2.43    Update Percent Field Handling and set Formula Fields to be Non-Editable 
+ * 
+ * 08/26/20 -   Eric Smith -    Version 2.42    Get and return User's Timezone Offset so Time fields can be adjusted
+ * 
  * 07/07/20 -   Eric Smith -    Version 2.37    Fixed date displaying as a day earlier
  * 
  * 07/01/20 -   Eric Smith -    Version 2.36    Added a return value for the "Name" field of the SObject
@@ -50,6 +54,7 @@ public with sharing class SObjectController2 {
         list<String> timeFieldList;
         String objectName;
         String objectLinkField;
+        String timezoneOffset;
     }
 
     @AuraEnabled
@@ -73,9 +78,10 @@ public with sharing class SObjectController2 {
             String objName = records[0].getSObjectType().getDescribe().getName();
             curRR = getColumnData(curRR, fieldNames, objName);
             curRR = getLookupData(curRR, records, curRR.lookupFieldList, objName);
-            curRR = getRowData(curRR, records, curRR.dataMap, curRR.objNameFieldMap, curRR.lookupFieldList, curRR.percentFieldList, objName);
+            curRR = getRowData(curRR, records, curRR.dataMap, curRR.objNameFieldMap, curRR.lookupFieldList, curRR.percentFieldList, objName, curRR.noEditFieldList);
             curRR.objectName = objName;
         }
+        curRR.timezoneOffset = getTimezoneOffset().format();
         System.Debug('curRR - '+JSON.serializePretty(curRR));
         return JSON.serialize(curRR);  
     }
@@ -113,6 +119,8 @@ public with sharing class SObjectController2 {
                 + '", "scale" : "' + dfr.getScale() 
                 + '"}';
 
+            if (!dfr.isUpdateable() || dfr.isCalculated()) noEditFields.add(fieldName);  // Check for Read Only and Formula fields
+
             switch on dfr.getType().name() {
                 when 'REFERENCE' {
                     if (dfr.isUpdateable()) {       // Only works with Master-Detail fields that are reparentable
@@ -123,10 +131,14 @@ public with sharing class SObjectController2 {
                     percentFields.add(fieldName);
                 }
                 when 'TEXTAREA' {
-                    if (!dfr.isSortable()) noEditFields.add(fieldName); // Long Text Area and Rich Text Area                   
+                    if (!dfr.isSortable() && !noEditFields.contains(fieldname)) {
+                        noEditFields.add(fieldName); // Long Text Area and Rich Text Area   
+                    }                   
                 }
                 when 'ENCRYPTEDSTRING', 'PICKLIST', 'MULTIPICKLIST' {
-                    noEditFields.add(fieldName);
+                    if (!noEditFields.contains(fieldname)) {
+                        noEditFields.add(fieldName);
+                    }
                 }
                 when 'CURRENCY', 'DECIMAL', 'DOUBLE', 'INTEGER', 'LONG' {
                     // *** create scale attrib in datatableColumnFieldDescriptor and pass the getScale() values in that way. ***
@@ -190,7 +202,7 @@ public with sharing class SObjectController2 {
     }
 
     @AuraEnabled
-    public static ReturnResults getRowData(ReturnResults curRR, List<SObject> records, Map<String, Map<Id, SObject>> dataMap, Map<String, String> objNameFieldMap, List<String> lookupFields, List<String> percentFields, String objName) {
+    public static ReturnResults getRowData(ReturnResults curRR, List<SObject> records, Map<String, Map<Id, SObject>> dataMap, Map<String, String> objNameFieldMap, List<String> lookupFields, List<String> percentFields, String objName, List<String> noEditFields) {
         // Update object to include values for the "Name" field referenced by Lookup fields
         String lookupFieldData = '';
         Map<String,Boolean> firstRecord = new Map<String,Boolean>();
@@ -201,11 +213,11 @@ public with sharing class SObjectController2 {
         for(SObject so : records) {   
             
             // Divide percent field values by 100
-            for(String pf : percentFields) {
-                if(so.get(pf) != null) {
-                    so.put(pf, double.valueOf(so.get(pf))/100);
-                }
-            }
+            // for(String pf : percentFields) {
+            //     if(so.get(pf) != null && !noEditFields.contains(pf)) {
+            //         so.put(pf, double.valueOf(so.get(pf))/100);
+            //     }
+            // }
 
             // Add new lookup field values 
             for(String lf : lookupFields) {         
@@ -335,6 +347,12 @@ public with sharing class SObjectController2 {
             }
         }
         return strResult;
+    }
+
+    // Get the offset value between GMT and the running User's timezone
+    private static integer getTimezoneOffset() {
+        Datetime dtNow = Datetime.now();
+        return UserInfo.getTimezone().getOffset(dtNow);
     }
 
 }

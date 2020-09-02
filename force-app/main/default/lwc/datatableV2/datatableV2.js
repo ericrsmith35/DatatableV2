@@ -1,7 +1,7 @@
 /**
  * Lightning Web Component for Flow Screens:       datatableV2
  * 
- * VERSION:             2.36
+ * VERSION:             2.43
  * 
  * RELEASE NOTES:       https://github.com/ericrsmith35/DatatableV2/blob/master/README.md
  * 
@@ -58,6 +58,7 @@ export default class DatatableV2 extends LightningElement {
     @api hideCheckboxColumn;
     @api singleRowSelection;
     @api suppressBottomBar = false;
+    @api suppressNameFieldLink = false;
     @api tableHeight;
     @api outputSelectedRows = [];
     @api outputEditedRows = [];
@@ -140,6 +141,7 @@ export default class DatatableV2 extends LightningElement {
     @api cols = [];
     @api attribCount = 0;
     @api recordData = [];
+    @api timezoneOffset = 0;
     @track showSpinner = true;
     @track borderClass;
     @track columnFieldParameter;
@@ -457,6 +459,7 @@ export default class DatatableV2 extends LightningElement {
                 this.objectName = returnResults.objectName;
                 this.objectLinkField = returnResults.objectLinkField;
                 this.lookupFieldArray = JSON.parse('[' + returnResults.lookupFieldData + ']');
+                this.timezoneOffset = returnResults.timezoneOffset.replace(/,/g, '');
 
                 // Basic column info (label, fieldName, type) taken from the Schema in Apex
                 this.dtableColumnFieldDescriptorString = '[' + returnResults.dtableColumnFieldDescriptorString + ']';
@@ -492,13 +495,24 @@ export default class DatatableV2 extends LightningElement {
         let lookupFields = this.lookups;
         let lufield = '';
         let timeFields = this.timeFieldArray;
+        let percentFields = this.percentFieldArray;
         let lookupFieldObject = '';
 
         data.forEach(record => {
 
-            // Prepend a date to the Time field so it can be displayed
+            // Prepend a date to the Time field so it can be displayed and calculate offset based on User's timezone
             timeFields.forEach(time => {
-                record[time] = "2020-05-12T" + record[time];
+                if (record[time]) {
+                    record[time] = "2020-05-12T" + record[time];
+                    let dt = Date.parse(record[time]);
+                    let d = new Date();
+                    record[time] = d.setTime(Number(dt) - Number(this.timezoneOffset));
+                }
+            });
+
+            // Store percent field data as value/100
+            percentFields.forEach(pct => {
+                record[pct] = record[pct]/100;
             });
 
             // Flatten returned data
@@ -526,6 +540,7 @@ export default class DatatableV2 extends LightningElement {
             }); 
             
             // Handle Lookup for the SObject's "Name" Field
+            record[this.objectLinkField + '_name'] = record[this.objectLinkField];
             record[this.objectLinkField + '_lookup'] = MYDOMAIN + '.lightning.force.com/lightning/r/' + this.objectName + '/' + record['Id'] + '/view';
 
             // If needed, add more fields to datatable records
@@ -599,10 +614,8 @@ export default class DatatableV2 extends LightningElement {
                     case 'time':
                         editAttrib.edit = false;
                         break;
-                    case 'text':
-                        if (this.noEditFieldArray.indexOf(fieldName) != -1) editAttrib.edit = false;
-                        break;
                     default:
+                        if (this.noEditFieldArray.indexOf(fieldName) != -1) editAttrib.edit = false;
                 }
             }
 
@@ -730,7 +743,7 @@ export default class DatatableV2 extends LightningElement {
             }
 
             // Switch the SObject's "Name" Field to a Lookup
-            if (fieldName == this.objectLinkField) {
+            if (fieldName == this.objectLinkField && !this.suppressNameFieldLink) {
                 this.typeAttrib.type = 'url';
                 fieldName = fieldName + '_lookup';
                 this.typeAttributes = { label: { fieldName: this.objectLinkField }, target: '_blank' };
@@ -855,11 +868,10 @@ export default class DatatableV2 extends LightningElement {
             if (edraft != undefined) {
                 let efieldNames = Object.keys(edraft);
                 efieldNames.forEach(ef => {
-                    if(this.percentFieldArray.indexOf(ef) != -1) {
-                        eitem[ef] = Number(edraft[ef])*100; // Percent field
-                    } else {
-                        eitem[ef] = edraft[ef];
-                    }
+                    // if(this.percentFieldArray.indexOf(ef) != -1) {
+                    //     eitem[ef] = Number(edraft[ef])*100; // Percent field
+                    // }
+                    eitem[ef] = edraft[ef];
                 });
 
                 // Add/update edited record to output collection

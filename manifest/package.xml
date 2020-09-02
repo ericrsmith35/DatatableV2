@@ -4,7 +4,8 @@
         <members>Datatable_Configuration_Helper</members>
         <members>Datatable_Configuration_Helper_Temp_SubFlow</members>
         <name>Flow</name>
-    </types>    <types>
+    </types>
+    <types>
         <members>SObjectController2</members>
         <members>SObjectController2Test</members>
         <name>ApexClass</name>
