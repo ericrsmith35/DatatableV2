@@ -6,10 +6,11 @@ Lightning Web Component for Flow Screens:       **datatableV2**
 
 Additional components packaged with this LWC:
 
-                    Lightning Web Components:   datatableV2Spring20 (temporary version for hardcoded SObjects)   
-
-                    Apex Classes:               SObjectController2 
-                                                SObjectController2Test  
+                    Apex Classes:   SObjectController2 
+                                    SObjectController2Test
+                            
+                    Flows:          Datatable Configuration Helper
+                                    Datatable Configuration Helper - Temp SubFlow
                                                   
 **Documentation:**  https://unofficialsf.com/datatablev2-lightning-web-component-for-flow-screens/  
   
@@ -22,7 +23,12 @@ Blog: https://ericsplayground.wordpress.com/blog/
 Twitter: https://twitter.com/esmith35  
 
 ---
-**You must install these components FIRST**     
+**To just install datatableV2 without the Configuration helper, use these links: (v2.42)**  
+Production/Developer: https://login.salesforce.com/packaging/installPackage.apexp?p0=04t3t0000022Fqd  
+Sandbox: https://test.salesforce.com/packaging/installPackage.apexp?p0=04t3t0000022Fqd  
+
+---
+**You must install these components FIRST in order to use the Datatable Configuration Helper Flow**     
 Flow Base Components (https://unofficialsf.com/introducing-flowbasecomponents/)  
 Dual List Box (https://unofficialsf.com/duallistbox/)    
   
@@ -30,20 +36,46 @@ Dual List Box (https://unofficialsf.com/duallistbox/)
   <img alt="Deploy to Salesforce"
        src="https://raw.githubusercontent.com/afawcett/githubsfdeploy/master/deploy.png">
 </a>
+ 
+---    
+Because the Datatable Configuration Helper uses Metadata APIs, you’ll need to have a Remote Site Setting on the org. If you don’t, you’ll see an error like this:
+    
+`Metadata Transfer
+Job Status: Error: "IO Exception: Unauthorized endpoint, please check Setup->Security->Remote site settings. endpoint = https://test35-dev-ed--c.visualforce.com/services/Soap/m/42.0"`
+    
+To address this, copy the root url from the error message and go to Setup –> Remote Site Settings and create a new setting.
+
+![Remote Site Setting](RemoteSiteSetting.PNG?raw=true)
+    
+This configures your org to essentially allow applications to run that call out to the internet and then back into the same org via its API endpoints.
 
 ---
-
 ## Release Notes
+09/01/20 -  Eric Smith -    Version 2.43 -  
+            Bug Fix:        Update Percent Field Handling and set Formula Fields to be Non-Editable  
+              
+08/26/20 -  Eric Smith -    Version 2.42 -  
+            Bug Fix:        Update Time fields with the User's Timezone Offset value so they display as intended  
+            Bug Fix:        Fix field type so Datetime fields display correctly    
+                
+08/14/20 -  Eric Smith -    Version 2.41 -     
+            Bug Fix:        Fixed issue with time and date-time fields being displayed as a day earlier     
+               
+08/11/20 -  Eric Smith -    Version 2.40 -  
+            Updates:        Added attribute to allow the suppression of the record link on the SObject's 'Name' field  
+            Bug Fix:        Fixed code so the 'Name' Field column now sorts correctly  
+              
 07/31/20 -  Eric Smith -    Version 2.39 -   
             Updates:        Added Datatable Configuration Helper Flow  
             REQUIRES:       Flow Base Components (https://unofficialsf.com/introducing-flowbasecomponents/)  
-            REQUIRES:       Dual List Box (https://unofficialsf.com/duallistbox/)  
+            REQUIRES:       Dual List Box (https://unofficialsf.com/duallistbox/)   
+            REQUIRES:       Remote Site Setting (Setup)
                   
 07/31/20 -  Andy Hass -     Version 2.38 -  
             Updates:        Added support for Checkbox Field Type
                 
 07/07/20 -  Eric Smith -    Version 2.37 -    
-            Bug Fix:        Fixed issue date being displayed as a day earlier   
+            Bug Fix:        Fixed issue with the date being displayed as a day earlier   
               
 07/01/20 -  Eric Smith -    Version 2.36 -  
             Updates:        Now displays the primary "Name" field as a Link (textWrap = true)  
