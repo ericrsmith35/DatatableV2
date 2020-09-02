@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
-        <members>*</members>
+        <members>Datatable_Configuration_Helper</members>
+        <members>Datatable_Configuration_Helper_Temp_SubFlow</members>
+        <name>Flow</name>
+    </types>
+    <types>
+        <members>SObjectController2</members>
+        <members>SObjectController2Test</members>
         <name>ApexClass</name>
     </types>
     <types>
-        <members>*</members>
-        <name>ApexComponent</name>
+        <members>datatableV2</members>
+        <name>LightningComponentBundle</name>
     </types>
     <types>
         <members>*</members>
