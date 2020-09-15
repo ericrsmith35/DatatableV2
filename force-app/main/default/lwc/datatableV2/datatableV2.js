@@ -951,10 +951,13 @@ export default class DatatableV2 extends LightningElement {
     handleHeaderAction(event) {
         // Handle Set Filter and Clear Filter
         const actionName = event.detail.action.name;
+        if (actionName.substr(actionName.length - 4) == 'Text') {   // Exit if system header action of wrapText or clipText
+            return;
+        }
         this.isFiltered = false;
         const colDef = event.detail.columnDefinition;
         this.filterColumns = JSON.parse(JSON.stringify([...this.columns]));
-        this.columnNumber = Number(actionName.split("_")[1]);     
+        this.columnNumber = Number(actionName.split("_")[1]);
         this.baseLabel = this.filterColumns[this.columnNumber].label.split(' [')[0];
         const prompt = (this.isConfigMode) ? 'Label' : 'Filter';
         this.inputLabel = 'Column ' + prompt + ': ' + this.baseLabel;
