@@ -51,6 +51,10 @@ This configures your org to essentially allow applications to run that call out 
 
 ---
 ## Release Notes
+09/20/20 -  Kevin Hart -    Version 2.44 - 
+            Updates:        Added ability to display Rich Text fields  
+            Eric Smith -    Bug Fix: Fixed error when selecting column action of WrapText or ClipText  
+                
 09/01/20 -  Eric Smith -    Version 2.43 -  
             Bug Fix:        Update Percent Field Handling and set Formula Fields to be Non-Editable  
               

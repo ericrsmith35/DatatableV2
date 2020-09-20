@@ -1,7 +1,7 @@
 /**
  * Lightning Web Component for Flow Screens:       datatableV2
  * 
- * VERSION:             2.43
+ * VERSION:             2.44
  * 
  * RELEASE NOTES:       https://github.com/ericrsmith35/DatatableV2/blob/master/README.md
  * 
@@ -37,7 +37,7 @@ const ROUNDWIDTH = 5;       // Used to round off the column widths during Config
 const MYDOMAIN = 'https://' + window.location.hostname.split('.')[0].replace('--c','');
 
 export default class DatatableV2 extends LightningElement {
-    
+
     // Component Input & Output Attributes
     @api tableData = [];
     @api columnFields;
@@ -187,7 +187,7 @@ export default class DatatableV2 extends LightningElement {
                 this.basicColumns.push({
                     label: field,
                     fieldName: field,
-                    type: 'text',
+                    type: 'richtext',
                     scale: 0
                 });
             })
@@ -420,6 +420,11 @@ export default class DatatableV2 extends LightningElement {
                         this.lookupFieldArray.push(this.basicColumns[t.column].fieldName);
                         this.lookups.push(this.basicColumns[t.column].fieldName); 
                         this.basicColumns[t.column].type = 'lookup';         
+                        break;
+                    case 'text':
+                        this.lookupFieldArray.push(this.basicColumns[t.column].fieldName);
+                        this.lookups.push(this.basicColumns[t.column].fieldName); 
+                        this.basicColumns[t.column].type = 'richtext';         
                 }
             });
 
@@ -609,8 +614,10 @@ export default class DatatableV2 extends LightningElement {
                     case 'time':
                         editAttrib.edit = false;
                         break;
-                    default:
+                    case 'text':
                         if (this.noEditFieldArray.indexOf(fieldName) != -1) editAttrib.edit = false;
+                        break;
+                    default:                       
                 }
             }
 
@@ -716,6 +723,8 @@ export default class DatatableV2 extends LightningElement {
                     }
                     break;
                 default:
+                    type = 'richtext';
+                    this.typeAttrib.type = 'richtext';
             }
 
             // Change lookup to url and reference the new fields that will be added to the datatable object
@@ -730,7 +739,7 @@ export default class DatatableV2 extends LightningElement {
                     fieldName = lufield + '_lookup';
                     this.typeAttributes = { label: { fieldName: lufield + '_name' }, target: '_blank' };
                 } else {
-                    this.typeAttrib.type = 'text';      // Non reparentable Master-Detail fields are not supported
+                    this.typeAttrib.type = 'richtext';      // Non reparentable Master-Detail fields are not supported
                 }
             }
 
@@ -942,10 +951,13 @@ export default class DatatableV2 extends LightningElement {
     handleHeaderAction(event) {
         // Handle Set Filter and Clear Filter
         const actionName = event.detail.action.name;
+        if (actionName.substr(actionName.length - 4) == 'Text') {   // Exit if system header action of wrapText or clipText
+            return;
+        }
         this.isFiltered = false;
         const colDef = event.detail.columnDefinition;
         this.filterColumns = JSON.parse(JSON.stringify([...this.columns]));
-        this.columnNumber = Number(actionName.split("_")[1]);     
+        this.columnNumber = Number(actionName.split("_")[1]);
         this.baseLabel = this.filterColumns[this.columnNumber].label.split(' [')[0];
         const prompt = (this.isConfigMode) ? 'Label' : 'Filter';
         this.inputLabel = 'Column ' + prompt + ': ' + this.baseLabel;
@@ -993,7 +1005,7 @@ export default class DatatableV2 extends LightningElement {
             case 'label':   // Config Mode Only
                 this.columnFilterValue = this.columnFilterValues[this.columnNumber];
                 this.columnFilterValue = (this.columnFilterValue) ? this.columnFilterValue : this.baseLabel;
-                this.columnType = 'text';
+                this.columnType = 'richtext';
                 this.inputType = this.convertType(this.columnType);
                 this.inputFormat = (this.inputType == 'number') ? this.convertFormat(this.columnType) : null;
                 this.handleOpenFilterInput();
@@ -1053,8 +1065,10 @@ export default class DatatableV2 extends LightningElement {
                 return 'number';
             case 'percent':
                 return 'number';
+            case 'text':
+                return 'richtext';
             default:
-                return 'text';
+                return 'richtext';
         }
     }
 
