@@ -12,6 +12,7 @@
     </types>
     <types>
         <members>datatableV2</members>
+        <members>richDatatable</members>
         <name>LightningComponentBundle</name>
     </types>
     <version>49.0</version>
