@@ -51,6 +51,9 @@ This configures your org to essentially allow applications to run that call out 
 
 ---
 ## Release Notes
+09/22/20 -  Eric Smith -    Version 2.45 -  
+            Bug Fix:        Fixed inability to edit some field types (introduced by v2.44)
+  
 09/20/20 -  Kevin Hart -    Version 2.44 - 
             Updates:        Added ability to display Rich Text fields  
             Eric Smith -    Bug Fix: Fixed error when selecting column action of WrapText or ClipText  

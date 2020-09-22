@@ -16,6 +16,8 @@
  *              of the Name fields in the corresponding records. Return the
  *              records that now include both the Id and Name for each lookup.
  * 
+ * 09/22/20 -   Eric Smith -    Version 2.45    Set type as Richtext for Text Formula Fields
+ * 
  * 09/01/20 -   Eric Smith -    Version 2.43    Update Percent Field Handling and set Formula Fields to be Non-Editable 
  * 
  * 08/26/20 -   Eric Smith -    Version 2.42    Get and return User's Timezone Offset so Time fields can be adjusted
@@ -115,7 +117,7 @@ public with sharing class SObjectController2 {
             datatableColumnFieldDescriptor = datatableColumnFieldDescriptor 
                 + ',{"label" : "' + dfr.getLabel() 
                 + '", "fieldName" : "' + fieldName 
-                + '", "type" : "' + convertType(dfr.getType().name()) 
+                + '", "type" : "' + convertType(dfr.getType().name(), dfr.isCalculated()) 
                 + '", "scale" : "' + dfr.getScale() 
                 + '"}';
 
@@ -259,7 +261,7 @@ public with sharing class SObjectController2 {
     }
 
     //convert the apex type to the corresponding javascript type that datatable will understand
-    private static String convertType (String apexType){
+    private static String convertType (String apexType, Boolean isFormula){
         switch on apexType {
             when 'BOOLEAN' {
                 return 'boolean';
@@ -302,6 +304,10 @@ public with sharing class SObjectController2 {
             }
             when 'CHECKBOX' {
                 return 'checkbox';
+            }
+            when 'STRING' {
+                if (isFormula) return 'richtext';
+                return 'text';
             }
             when else {
                 // throw new MyApexException ('you\'ve specified the unsupported field type: ' + apexType );
