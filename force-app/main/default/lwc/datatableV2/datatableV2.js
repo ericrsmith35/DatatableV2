@@ -1,7 +1,7 @@
 /**
  * Lightning Web Component for Flow Screens:       datatableV2
  * 
- * VERSION:             2.44
+ * VERSION:             2.45
  * 
  * RELEASE NOTES:       https://github.com/ericrsmith35/DatatableV2/blob/master/README.md
  * 
@@ -26,6 +26,8 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *  
  **/
+
+ const VERSION_NUMBER = 2.45;
 
 import { LightningElement, api, track, wire } from 'lwc';
 import getReturnResults from '@salesforce/apex/SObjectController2.getReturnResults';
@@ -152,6 +154,8 @@ export default class DatatableV2 extends LightningElement {
     @track columnFilterParameter;
 
     connectedCallback() {
+
+        console.log("VERSION_NUMBER", VERSION_NUMBER);
 
         // JSON input attributes
         if (this.isUserDefinedObject) {
