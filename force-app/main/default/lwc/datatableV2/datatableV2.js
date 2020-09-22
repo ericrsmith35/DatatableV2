@@ -268,7 +268,7 @@ export default class DatatableV2 extends LightningElement {
                 label: this.columnValue(label)
             });
         });
-   
+
         if (this.isUserDefinedObject) {
 
             // JSON Version - Parse Column Scale attribute
@@ -314,7 +314,7 @@ export default class DatatableV2 extends LightningElement {
                 attribute: this.columnValue(cellAttrib)
             });
         });
-   
+
         // Parse Column Other Attributes attribute (Because multiple attributes use , these are separated by ;)
         const parseOtherAttribs = (this.columnOtherAttribs.length > 0) ? this.removeSpaces(this.columnOtherAttribs).split(';') : [];
         this.attribCount = 0;   // These attributes must specify a column number or field API name
@@ -324,7 +324,7 @@ export default class DatatableV2 extends LightningElement {
                 attribute: this.columnValue(otherAttrib)
             });
         });
-         
+
         // Parse Column TypeAttribute attribute (Because multiple attributes use , these are separated by ;)
         const parseTypeAttribs = (this.columnTypeAttribs.length > 0) ? this.removeSpaces(this.columnTypeAttribs).split(';') : [];
         this.attribCount = 0;   // These attributes must specify a column number or field API name
@@ -425,7 +425,7 @@ export default class DatatableV2 extends LightningElement {
                         this.lookups.push(this.basicColumns[t.column].fieldName); 
                         this.basicColumns[t.column].type = 'lookup';         
                         break;
-                    case 'text':
+                    case 'richtext':
                         this.lookupFieldArray.push(this.basicColumns[t.column].fieldName);
                         this.lookups.push(this.basicColumns[t.column].fieldName); 
                         this.basicColumns[t.column].type = 'richtext';         
@@ -522,7 +522,7 @@ export default class DatatableV2 extends LightningElement {
             // Flatten returned data
             lookupFields.forEach(lookup => {
                 if (this.isUserDefinedObject) {
-	                lufield = lookup;
+                    lufield = lookup;
                     record[lufield + '_lookup'] = MYDOMAIN + record[lufield + '_lookup'];                    
                 } else {
                     if(lookup.toLowerCase().endsWith('id')) {
@@ -726,9 +726,11 @@ export default class DatatableV2 extends LightningElement {
                         this.typeAttributes = { minimumFractionDigits:scale };   // Show the number of decimal places defined for the field
                     }
                     break;
-                default:
-                    type = 'richtext';
+                case 'richtext':
                     this.typeAttrib.type = 'richtext';
+                    break;
+                default:
+                    
             }
 
             // Change lookup to url and reference the new fields that will be added to the datatable object
@@ -743,7 +745,7 @@ export default class DatatableV2 extends LightningElement {
                     fieldName = lufield + '_lookup';
                     this.typeAttributes = { label: { fieldName: lufield + '_name' }, target: '_blank' };
                 } else {
-                    this.typeAttrib.type = 'richtext';      // Non reparentable Master-Detail fields are not supported
+                    this.typeAttrib.type = 'text';      // Non reparentable Master-Detail fields are not supported
                 }
             }
 
@@ -1070,7 +1072,7 @@ export default class DatatableV2 extends LightningElement {
             case 'percent':
                 return 'number';
             case 'text':
-                return 'richtext';
+                return 'text';
             default:
                 return 'richtext';
         }
