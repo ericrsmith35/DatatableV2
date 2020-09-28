@@ -16,6 +16,8 @@
  *              of the Name fields in the corresponding records. Return the
  *              records that now include both the Id and Name for each lookup.
  * 
+ * 10/xx/20 -   Eric Smith -    Version 2.46    Issue error if no field names are given
+ * 
  * 09/22/20 -   Eric Smith -    Version 2.45    Set type as Richtext for Text Formula Fields
  * 
  * 09/01/20 -   Eric Smith -    Version 2.43    Update Percent Field Handling and set Formula Fields to be Non-Editable 
@@ -67,7 +69,7 @@ public with sharing class SObjectController2 {
         if (records.isEmpty()) {
             // throw new MyApexException ('The datatable record collection is empty');
             List<String> emptyList = new List<String>();
-            curRR.dtableColumnFieldDescriptorString = '{"label":"Empty Table", "fieldName":"Id", "type":"text"}';
+            curRR.dtableColumnFieldDescriptorString = '{"label":"Empty Table, Fields ['+fieldNames+']", "fieldName":"Id", "type":"text"}';
             curRR.lookupFieldData = '{}';
             curRR.lookupFieldList = emptyList;
             curRR.percentFieldList = emptyList;
@@ -90,7 +92,10 @@ public with sharing class SObjectController2 {
 
     @AuraEnabled
     public static ReturnResults getColumnData(ReturnResults curRR, String fields, String objName) {
-        
+
+        if (fields == '') 
+            throw new MyApexException('You must specify at least one field API name from the object ' + objName);
+
         SObjectType sobjType = ((SObject)(Type.forName('Schema.'+objName).newInstance())).getSObjectType();
         DescribeSObjectResult objDescribe = sobjType.getDescribe();
 
@@ -110,7 +115,7 @@ public with sharing class SObjectController2 {
             Map<String, Schema.SObjectField> fieldMap = objDescribe.fields.getMap();
             Schema.SObjectField fieldItem = fieldMap.get(fieldName);
             if (fieldItem == null) 
-                throw new MyApexException('could not find the field: ' + fieldName + ' on the object ' + objName);
+                throw new MyApexException('Could not find the field: ' + fieldName + ' on the object ' + objName);
             Schema.DescribeFieldResult dfr = fieldItem.getDescribe();
             curFieldDescribes.add(dfr);
 

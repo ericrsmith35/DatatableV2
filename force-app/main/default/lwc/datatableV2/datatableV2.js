@@ -1,7 +1,7 @@
 /**
  * Lightning Web Component for Flow Screens:       datatableV2
  * 
- * VERSION:             2.45
+ * VERSION:             2.46
  * 
  * RELEASE NOTES:       https://github.com/ericrsmith35/DatatableV2/blob/master/README.md
  * 
@@ -27,7 +27,7 @@
  *  
  **/
 
- const VERSION_NUMBER = 2.45;
+ const VERSION_NUMBER = 2.46;
 
 import { LightningElement, api, track, wire } from 'lwc';
 import getReturnResults from '@salesforce/apex/SObjectController2.getReturnResults';
@@ -42,7 +42,7 @@ export default class DatatableV2 extends LightningElement {
 
     // Component Input & Output Attributes
     @api tableData = [];
-    @api columnFields;
+    @api columnFields = [];
     @api columnAlignments = [];
     @api columnCellAttribs = [];
     @api columnEdits = '';
@@ -450,7 +450,10 @@ export default class DatatableV2 extends LightningElement {
 
             // Call Apex Controller and get Column Definitions and update Row Data
             let data = (this.tableData) ? JSON.parse(JSON.stringify([...this.tableData])) : [];
-            let fieldList = this.columnFields.replace(/\s/g, ''); // Remove spaces
+console.log('colFields_L',this.columnFields.length);
+// console.log('colFields_V',this.columnFields.replace(/\s/g, ''));
+            let fieldList = (this.columnFields.length > 0) ? this.columnFields.replace(/\s/g, '') : ''; // Remove spaces
+console.log('fieldList','[',fieldList,']');
             getReturnResults({ records: data, fieldNames: fieldList })
             .then(result => {
                 let returnResults = JSON.parse(result);
