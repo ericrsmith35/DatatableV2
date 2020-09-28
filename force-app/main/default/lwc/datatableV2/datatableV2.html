@@ -116,6 +116,11 @@ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVE
             >
             </c-rich-datatable>
         </div>
+        <div if:true={isWorking}>
+            <lightning-spinner
+                alternative-text="Working..." variant="brand">
+            </lightning-spinner>
+        </div>
 
         <!-- Special parameter display for Configuration Mode -->
         <template if:true={isConfigMode}>

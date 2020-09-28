@@ -144,6 +144,7 @@ export default class DatatableV2 extends LightningElement {
     @api attribCount = 0;
     @api recordData = [];
     @api timezoneOffset = 0;
+    @track isWorking = false;
     @track showSpinner = true;
     @track borderClass;
     @track columnFieldParameter;
@@ -450,10 +451,7 @@ export default class DatatableV2 extends LightningElement {
 
             // Call Apex Controller and get Column Definitions and update Row Data
             let data = (this.tableData) ? JSON.parse(JSON.stringify([...this.tableData])) : [];
-console.log('colFields_L',this.columnFields.length);
-// console.log('colFields_V',this.columnFields.replace(/\s/g, ''));
             let fieldList = (this.columnFields.length > 0) ? this.columnFields.replace(/\s/g, '') : ''; // Remove spaces
-console.log('fieldList','[',fieldList,']');
             getReturnResults({ records: data, fieldNames: fieldList })
             .then(result => {
                 let returnResults = JSON.parse(result);
@@ -952,9 +950,19 @@ console.log('fieldList','[',fieldList,']');
         }       
         let fieldValue = row => row[sortField] || '';
         let reverse = sortDirection === 'asc'? 1: -1;
-        this.mydata = [...this.mydata.sort(
-            (a,b)=>(a=fieldValue(a),b=fieldValue(b),reverse*((a>b)-(b>a)))
-        )];
+
+        this.isWorking = true;
+        new Promise((resolve, reject) => {
+            setTimeout(() => {
+                this.mydata = [...this.mydata.sort(
+                    (a,b)=>(a=fieldValue(a),b=fieldValue(b),reverse*((a>b)-(b>a)))
+                )];
+                resolve();
+            }, 0);
+        })
+        .then(
+            () => this.isWorking = false
+        );        
     }
     
     handleHeaderAction(event) {
@@ -1036,7 +1044,18 @@ console.log('fieldList','[',fieldList,']');
                 if (this.isConfigMode) {
                     this.updateLabelParam();
                 }
-                this.filterColumnData();
+
+                this.isWorking = true;
+                new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        this.filterColumnData();
+                        resolve();
+                    }, 0);
+                })
+                .then(
+                    () => this.isWorking = false
+                );
+
                 this.filterColumns[this.columnNumber].actions.find(a => a.name == 'clear_'+this.columnNumber).disabled = true;
                 if (this.sortedBy != undefined) {
                     this.doSort(this.sortedBy, this.sortedDirection);       // Re-Sort the data
@@ -1204,56 +1223,66 @@ console.log('fieldList','[',fieldList,']');
 
     filterColumnData() {
         // Filter the rows based on the current column filter values
-        if (!this.isConfigMode) {
-            const rows = [...this.savePreEditData];
-            const cols = this.columnFilterValues;
-            var filteredRows = [];
-            rows.forEach(row => {
-                var match = true;
-                for (var col = 0; col < cols.length; col++) {
-                    var fieldName = this.filterColumns[col].fieldName;
-                    if (fieldName.endsWith('_lookup')) {
-                        fieldName = fieldName.slice(0,fieldName.lastIndexOf('_lookup')) + '_name';   
-                    }                
-                    if (this.columnFilterValues[col] && this.columnFilterValues[col] != null) {
-                        if (!row[fieldName] || row[fieldName] == null) {    // No match because the field is empty
-                            match = false;
-                            break; 
-                        }                   
+        this.isWorking = true;
+        new Promise((resolve, reject) => {
+            setTimeout(() => {
+                if (!this.isConfigMode) {
+                    const rows = [...this.savePreEditData];
+                    const cols = this.columnFilterValues;
+                    var filteredRows = [];
+                    rows.forEach(row => {
+                        var match = true;
+                        for (var col = 0; col < cols.length; col++) {
+                            var fieldName = this.filterColumns[col].fieldName;
+                            if (fieldName.endsWith('_lookup')) {
+                                fieldName = fieldName.slice(0,fieldName.lastIndexOf('_lookup')) + '_name';   
+                            }                
+                            if (this.columnFilterValues[col] && this.columnFilterValues[col] != null) {
+                                if (!row[fieldName] || row[fieldName] == null) {    // No match because the field is empty
+                                    match = false;
+                                    break; 
+                                }                   
 
-                        switch(this.filterColumns[col].type) {
-                            case 'number':
-                            case 'currency':
-                            case 'percent':
-                            case 'date':
-                            case 'date-local':
-                            case 'datetime':
-                            case 'time':
-                                if (row[fieldName] != this.columnFilterValues[col]) {    // Check for exact match on numeric and date fields
-                                    match = false;
-                                    break;                                
+                                switch(this.filterColumns[col].type) {
+                                    case 'number':
+                                    case 'currency':
+                                    case 'percent':
+                                    case 'date':
+                                    case 'date-local':
+                                    case 'datetime':
+                                    case 'time':
+                                        if (row[fieldName] != this.columnFilterValues[col]) {    // Check for exact match on numeric and date fields
+                                            match = false;
+                                            break;                                
+                                        }
+                                        break;
+                                    default:
+                                        var fieldValue = row[fieldName].toString();
+                                        var filterValue = this.columnFilterValues[col];
+                                        if (!this.matchCaseOnFilters) {
+                                            fieldValue = fieldValue.toLowerCase();
+                                            filterValue = filterValue.toLowerCase();
+                                        }
+                                        if (fieldValue.search(filterValue) == -1) {  // Check for filter value within field value
+                                            match = false;
+                                            break;
+                                        }                            
                                 }
-                                break;
-                            default:
-                                var fieldValue = row[fieldName].toString();
-                                var filterValue = this.columnFilterValues[col];
-                                if (!this.matchCaseOnFilters) {
-                                    fieldValue = fieldValue.toLowerCase();
-                                    filterValue = filterValue.toLowerCase();
-                                }
-                                if (fieldValue.search(filterValue) == -1) {  // Check for filter value within field value
-                                    match = false;
-                                    break;
-                                }                            
+                            }
                         }
-                    }
+                        if (match) {
+                            filteredRows.push(row);
+                        }
+                    });
+                    this.mydata = filteredRows;
                 }
-                if (match) {
-                    filteredRows.push(row);
-                }
-            });
-            this.mydata = filteredRows;
-        }
+                resolve();
+            }, 0);
+        })
+        .then(
+            () => this.isWorking = false
+        );
+        
         this.filterColumns[this.columnNumber].actions.find(a => a.name == 'clear_'+this.columnNumber).disabled = false;
         this.isFiltered = true;
     }
