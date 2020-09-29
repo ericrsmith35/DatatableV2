@@ -54,6 +54,7 @@ This configures your org to essentially allow applications to run that call out 
 10/xx/20 -  Eric Smith -    Version 2.46 -  
             Updates:        Switched DualListbox to the fbc version
                             Added spinners while sorting & filtering data
+                            Allow case insensitive field API names
               
 09/22/20 -  Eric Smith -    Version 2.45 -  
             Bug Fix:        Fixed inability to edit some field types (introduced by v2.44)

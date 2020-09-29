@@ -121,7 +121,7 @@ public with sharing class SObjectController2 {
 
             datatableColumnFieldDescriptor = datatableColumnFieldDescriptor 
                 + ',{"label" : "' + dfr.getLabel() 
-                + '", "fieldName" : "' + fieldName 
+                + '", "fieldName" : "' + dfr.getName()      // pass back correct API name if user did not pass in correct case (Name vs name)
                 + '", "type" : "' + convertType(dfr.getType().name(), dfr.isCalculated()) 
                 + '", "scale" : "' + dfr.getScale() 
                 + '"}';
