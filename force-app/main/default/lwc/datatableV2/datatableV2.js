@@ -56,6 +56,7 @@ export default class DatatableV2 extends LightningElement {
     @api matchCaseOnFilters;
     @api maxNumberOfRows;
     @api preSelectedRows = [];
+    @api numberOfRowsSelected = 0;
     @api isConfigMode;
     @api hideCheckboxColumn;
     @api singleRowSelection;
@@ -358,6 +359,7 @@ export default class DatatableV2 extends LightningElement {
 
         // Handle pre-selected records
         this.outputSelectedRows = this.preSelectedRows;
+        this.numberOfRowsSelected = this.outputSelectedRows.length;
         if (this.isUserDefinedObject) {
             this.outputSelectedRowsString = JSON.stringify(this.outputSelectedRows);                                        //JSON Version
             this.dispatchEvent(new FlowAttributeChangeEvent('outputSelectedRowsString', this.outputSelectedRowsString));    //JSON Version
@@ -452,6 +454,7 @@ export default class DatatableV2 extends LightningElement {
             // Call Apex Controller and get Column Definitions and update Row Data
             let data = (this.tableData) ? JSON.parse(JSON.stringify([...this.tableData])) : [];
             let fieldList = (this.columnFields.length > 0) ? this.columnFields.replace(/\s/g, '') : ''; // Remove spaces
+            console.log('Passing data to Apex Controller', data);
             getReturnResults({ records: data, fieldNames: fieldList })
             .then(result => {
                 let returnResults = JSON.parse(result);
@@ -920,6 +923,7 @@ export default class DatatableV2 extends LightningElement {
         // Only used with row selection
         // Update values to be passed back to the Flow
         let selectedRows = event.detail.selectedRows;
+        this.numberOfRowsSelected = selectedRows.length;
         let sdata = [];
         selectedRows.forEach(srow => {
             const selData = this.tableData.find(d => d[this.keyField] == srow[this.keyField]);

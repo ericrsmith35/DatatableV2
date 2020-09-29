@@ -29,6 +29,9 @@
             <property name="outputEditedRowsString" label="Output Edited Rows (User Defined)" type="String" role="outputOnly" description="Object Collection string variable to contain only the records that were edited in the datatable."/>
   
             <!-- ============================================================================================================================- -->  
+            
+            <!-- Additional Output Parameters -->
+            <property name="numberOfRowsSelected" label="Output Number of Selected Records" type="Integer" role="outputOnly" description="Total count of the number of selected records"/>
   
             <!-- Forcing sort order of parameters with special characters _(1) -(2) .(3) -->  
             <property name="columnFields" label="_ Column Fields" type="String" role="inputOnly" description="REQUIRED: Comma separated list of field API Names to display in the datatable."/>

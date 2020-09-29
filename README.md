@@ -52,7 +52,8 @@ This configures your org to essentially allow applications to run that call out 
 ---
 ## Release Notes
 10/xx/20 -  Eric Smith -    Version 2.46 -  
-            Updates:        Switched DualListbox to the fbc version
+            Updates:        Added new Output Parameter for the # of Selected Records
+                            Switched DualListbox to the fbc version
                             Added spinners while sorting & filtering data
                             Allow case insensitive field API names
               
