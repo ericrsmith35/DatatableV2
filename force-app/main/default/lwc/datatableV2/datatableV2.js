@@ -359,7 +359,7 @@ export default class DatatableV2 extends LightningElement {
 
         // Handle pre-selected records
         this.outputSelectedRows = this.preSelectedRows;
-        this.numberOfRowsSelected = this.outputSelectedRows.length;
+        this.updateNumberOfRowsSelected(this.outputSelectedRows.length);
         if (this.isUserDefinedObject) {
             this.outputSelectedRowsString = JSON.stringify(this.outputSelectedRows);                                        //JSON Version
             this.dispatchEvent(new FlowAttributeChangeEvent('outputSelectedRowsString', this.outputSelectedRowsString));    //JSON Version
@@ -923,7 +923,7 @@ export default class DatatableV2 extends LightningElement {
         // Only used with row selection
         // Update values to be passed back to the Flow
         let selectedRows = event.detail.selectedRows;
-        this.numberOfRowsSelected = selectedRows.length;
+        this.updateNumberOfRowsSelected(selectedRows.length);
         let sdata = [];
         selectedRows.forEach(srow => {
             const selData = this.tableData.find(d => d[this.keyField] == srow[this.keyField]);
@@ -937,6 +937,12 @@ export default class DatatableV2 extends LightningElement {
             this.dispatchEvent(new FlowAttributeChangeEvent('outputSelectedRows', this.outputSelectedRows));
         }
         console.log('outputSelectedRows',this.outputSelectedRows);
+    }
+
+    updateNumberOfRowsSelected(numberOfRows) {
+        // Handle updating output attribute for the number of selected rows
+        this.numberOfRowsSelected = numberOfRows;
+        this.dispatchEvent(new FlowAttributeChangeEvent('numberOfRowsSelected', this.numberOfRowsSelected));
     }
 
     updateColumnSorting(event) {
