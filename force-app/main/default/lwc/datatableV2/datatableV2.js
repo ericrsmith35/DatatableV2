@@ -57,6 +57,7 @@ export default class DatatableV2 extends LightningElement {
     @api maxNumberOfRows;
     @api preSelectedRows = [];
     @api numberOfRowsSelected = 0;
+    @api isRequired;
     @api isConfigMode;
     @api hideCheckboxColumn;
     @api singleRowSelection;
@@ -66,6 +67,8 @@ export default class DatatableV2 extends LightningElement {
     @api outputSelectedRows = [];
     @api outputEditedRows = [];
     @api tableBorder;
+    @api tableIcon;
+    @api tableLabel;
 
     // JSON Version Attributes (User Defined Object)
     @api isUserDefinedObject = false;
@@ -145,6 +148,7 @@ export default class DatatableV2 extends LightningElement {
     @api attribCount = 0;
     @api recordData = [];
     @api timezoneOffset = 0;
+    @track isInvalid = false;
     @track isWorking = false;
     @track showSpinner = true;
     @track borderClass;
@@ -154,6 +158,22 @@ export default class DatatableV2 extends LightningElement {
     @track columnWidthParameter;
     @track columnEditParameter;
     @track columnFilterParameter;
+
+    get formElementClass() {
+        return this.isInvalid ? 'slds-form-element slds-has-error' : 'slds-form-element';
+    }
+
+    get requiredSymbol() {
+        return this.isRequired ? '*' : '';
+    }
+
+    get hasIcon() {
+        return (this.tableIcon && this.tableIcon.length > 0);
+    }
+
+    get formattedTableLabel() {
+        return (this.tableLabel && this.tableLabel.length > 0) ? '<h2>&nbsp;'+this.tableLabel+'</h2>' : '';
+    }
 
     connectedCallback() {
 
@@ -924,6 +944,10 @@ export default class DatatableV2 extends LightningElement {
         // Update values to be passed back to the Flow
         let selectedRows = event.detail.selectedRows;
         this.updateNumberOfRowsSelected(selectedRows.length);
+        this.setIsInvalidFlag(false);
+        if(this.isRequired && this.numberOfRowsSelected == 0) {
+            this.setIsInvalidFlag(true);
+        }
         let sdata = [];
         selectedRows.forEach(srow => {
             const selData = this.tableData.find(d => d[this.keyField] == srow[this.keyField]);
@@ -1400,4 +1424,25 @@ export default class DatatableV2 extends LightningElement {
         this.columnFilterParameter = (allSelected) ? 'All' : colString.substring(2);
     }
 
+    @api
+    validate() {
+        // Validation logic to pass back to the Flow
+        if(!this.isRequired || this.numberOfRowsSelected > 0) { 
+            this.setIsInvalidFlag(false);
+            return { isValid: true }; 
+        } 
+        else { 
+            // If the component is invalid, return the isValid parameter 
+            // as false and return an error message. 
+            this.setIsInvalidFlag(true);
+            return { 
+                isValid: false, 
+                errorMessage: 'This is a required entry.  At least 1 row must be selected.' 
+            }; 
+        }
+    }
+
+    setIsInvalidFlag(value) {
+        this.isInvalid = value;
+    }
 }

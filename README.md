@@ -54,6 +54,8 @@ This configures your org to essentially allow applications to run that call out 
 10/xx/20 -  Eric Smith -    Version 2.46 -  
             Updates:        Added new Output Parameter for the # of Selected Records 
                             (this can be used for conditional visibility on the same screen as the datatable)  
+                            New Required? Parameter - Requires the user to select at least 1 row to proceed
+                            New optional Table Header with Table Icon and Table Label Parameters
                             Switched DualListbox to the fbc version  
                             Added spinners while sorting & filtering data  
                             Allow case insensitive field API names  
