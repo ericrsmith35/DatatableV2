@@ -16,8 +16,10 @@
             <property name="preSelectedRows" label="Pre-Selected Rows" type="{T[]}" role="inputOnly" description="Record Collection variable containing the records to show as pre-selected in the datatable."/>
             <property name="outputEditedRows" label="Output Edited Rows" type="{T[]}" role="outputOnly" description="Record Collection variable to contain only the records that were edited in the datatable. 
                 - NOTE: To write these edits back to the Object, you will need to do a Record Update in the Flow."/>
-            <property name="outputSelectedRows" label="Output Selected Rows" type="{T[]}" role="outputOnly" description="Record Collection variable to contain only the records that were selected in the datatable. 
+            <property name="outputSelectedRows" label="Output Selected Rows (Collection)" type="{T[]}" role="outputOnly" description="Record Collection variable to contain only the records that were selected in the datatable. 
                 - NOTE: These records may not contain all of the edited values."/>
+            <property name="outputSelectedRow" label="Output Selected Row (Object)" type="{T}" role="outputOnly" description="Record Object variable that contains the single record that was selected in the datatable. 
+                - NOTE: This is only provided when just a single record is selected."/>
   
             <!-- ============== These parameters are used when providing a User Defined object rather than a Salesforce SObject ============== -->  
             

@@ -65,6 +65,7 @@ export default class DatatableV2 extends LightningElement {
     @api suppressNameFieldLink = false;
     @api tableHeight;
     @api outputSelectedRows = [];
+    @api outputSelectedRow;
     @api outputEditedRows = [];
     @api tableBorder;
     @api tableIcon;
@@ -379,7 +380,7 @@ export default class DatatableV2 extends LightningElement {
 
         // Handle pre-selected records
         this.outputSelectedRows = this.preSelectedRows;
-        this.updateNumberOfRowsSelected(this.outputSelectedRows.length);
+        this.updateNumberOfRowsSelected(this.outputSelectedRows);
         if (this.isUserDefinedObject) {
             this.outputSelectedRowsString = JSON.stringify(this.outputSelectedRows);                                        //JSON Version
             this.dispatchEvent(new FlowAttributeChangeEvent('outputSelectedRowsString', this.outputSelectedRowsString));    //JSON Version
@@ -943,7 +944,7 @@ export default class DatatableV2 extends LightningElement {
         // Only used with row selection
         // Update values to be passed back to the Flow
         let selectedRows = event.detail.selectedRows;
-        this.updateNumberOfRowsSelected(selectedRows.length);
+        this.updateNumberOfRowsSelected(selectedRows);
         this.setIsInvalidFlag(false);
         if(this.isRequired && this.numberOfRowsSelected == 0) {
             this.setIsInvalidFlag(true);
@@ -963,10 +964,13 @@ export default class DatatableV2 extends LightningElement {
         console.log('outputSelectedRows',this.outputSelectedRows);
     }
 
-    updateNumberOfRowsSelected(numberOfRows) {
+    updateNumberOfRowsSelected(selectedRows) {
         // Handle updating output attribute for the number of selected rows
-        this.numberOfRowsSelected = numberOfRows;
+        this.numberOfRowsSelected = selectedRows.length;
         this.dispatchEvent(new FlowAttributeChangeEvent('numberOfRowsSelected', this.numberOfRowsSelected));
+        // Return an SObject Record if just a single row is selected
+        this.outputSelectedRow = (this.numberOfRowsSelected == 1) ? selectedRows[0] : null;
+        this.dispatchEvent(new FlowAttributeChangeEvent('outputSelectedRow', this.outputSelectedRow));
     }
 
     updateColumnSorting(event) {
