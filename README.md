@@ -60,6 +60,7 @@ This configures your org to essentially allow applications to run that call out 
                             Switched DualListbox to the fbc version  
                             Added spinners while sorting & filtering data  
                             Allow case insensitive field API names  
+                            Allow custom field API names w/o the __c suffix  
   
 09/22/20 -  Eric Smith -    Version 2.45 -  
             Bug Fix:        Fixed inability to edit some field types (introduced by v2.44)

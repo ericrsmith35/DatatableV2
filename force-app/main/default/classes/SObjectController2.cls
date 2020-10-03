@@ -17,6 +17,8 @@
  *              records that now include both the Id and Name for each lookup.
  * 
  * 10/xx/20 -   Eric Smith -    Version 2.46    Issue error if no field names are given
+ *                                              Allow case insensitive field names
+ *                                              Allow custom field API names w/o the __c suffix
  * 
  * 09/22/20 -   Eric Smith -    Version 2.45    Set type as Richtext for Text Formula Fields
  * 
@@ -114,8 +116,14 @@ public with sharing class SObjectController2 {
 
             Map<String, Schema.SObjectField> fieldMap = objDescribe.fields.getMap();
             Schema.SObjectField fieldItem = fieldMap.get(fieldName);
-            if (fieldItem == null) 
-                throw new MyApexException('Could not find the field: ' + fieldName + ' on the object ' + objName);
+            if (fieldItem == null) {
+                Schema.SObjectField fieldItem2 = fieldMap.get(fieldName + '__c');  // Allow for user to forget to add __c for custom fields
+                if (fieldItem2 == null) {
+                    throw new MyApexException('Could not find the field: ' + fieldName + ' on the object ' + objName);
+                } else {
+                    fieldItem = fieldItem2;
+                }
+            }
             Schema.DescribeFieldResult dfr = fieldItem.getDescribe();
             curFieldDescribes.add(dfr);
 
