@@ -27,7 +27,7 @@
  *  
  **/
 
- const VERSION_NUMBER = 2.46;
+const VERSION_NUMBER = 2.46;
 
 import { LightningElement, api, track, wire } from 'lwc';
 import getReturnResults from '@salesforce/apex/SObjectController2.getReturnResults';
