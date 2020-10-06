@@ -19,6 +19,7 @@
  * 10/xx/20 -   Eric Smith -    Version 2.46    Issue error if no field names are given
  *                                              Allow case insensitive field names
  *                                              Allow custom field API names w/o the __c suffix
+ *                                              Get and Return which fields are picklist fields along with Value & Label
  * 
  * 09/22/20 -   Eric Smith -    Version 2.45    Set type as Richtext for Text Formula Fields
  * 
@@ -55,9 +56,11 @@ public with sharing class SObjectController2 {
         List<String> lookupFieldList;
         Map<String, Map<Id, SObject>> dataMap;
         Map<String, String> objNameFieldMap;
+        Map<String, Map<String,String>> picklistFieldMap;   // Field API Name, <Picklist Value, Picklist Label>
         List<String> percentFieldList;
         List<String> noEditFieldList;
         list<String> timeFieldList;
+        list<String> picklistFieldList;
         String objectName;
         String objectLinkField;
         String timezoneOffset;
@@ -77,6 +80,7 @@ public with sharing class SObjectController2 {
             curRR.percentFieldList = emptyList;
             curRR.noEditFieldList = emptyList;
             curRR.timeFieldList = emptyList;
+            curRR.picklistFieldList = emptyList;
             curRR.rowData = records;
             curRR.objectName = 'EmptyCollection';
             curRR.objectLinkField = '';
@@ -109,6 +113,8 @@ public with sharing class SObjectController2 {
         List<String> percentFields = new List<String>();
         List<String> noEditFields = new List<String>();
         List<String> timeFields = new List<String>();
+        List<String> picklistFields = new List<String>();
+        Map<String, Map<String, String>> picklistFieldLabels = new Map<String, Map<String, String>>();
         String objectLinkField = getNameUniqueField(objName);   // Name (link) Field for the Datatable SObject
         System.debug('*** OBJ/LINK' + objname + '/' + objectLinkField);
 
@@ -146,12 +152,12 @@ public with sharing class SObjectController2 {
                     percentFields.add(fieldName);
                 }
                 when 'TEXTAREA' {
-                    if (!dfr.isSortable() && !noEditFields.contains(fieldname)) {
+                    if (!dfr.isSortable() && !noEditFields.contains(fieldName)) {
                         noEditFields.add(fieldName); // Long Text Area and Rich Text Area   
                     }                   
                 }
-                when 'ENCRYPTEDSTRING', 'PICKLIST', 'MULTIPICKLIST' {
-                    if (!noEditFields.contains(fieldname)) {
+                when 'ENCRYPTEDSTRING' {
+                    if (!noEditFields.contains(fieldName)) {
                         noEditFields.add(fieldName);
                     }
                 }
@@ -160,6 +166,17 @@ public with sharing class SObjectController2 {
                 }
                 when 'TIME' {
                     timeFields.add(fieldName);
+                }
+                when 'PICKLIST', 'MULTIPICKLIST' {
+                    picklistFields.add(dfr.getName());
+                    if (!noEditFields.contains(fieldName)) {
+                        noEditFields.add(fieldName);
+                    }
+                    Map<String, String> valueLabelPair = new Map<String, String>();
+                    for(Schema.PicklistEntry ple : dfr.getPicklistValues()) {
+                        valueLabelPair.put(ple.getValue(), ple.getLabel());
+                    }
+                    picklistFieldLabels.put(dfr.getName(), valueLabelPair);
                 }
                 when else {
                 }
@@ -173,6 +190,8 @@ public with sharing class SObjectController2 {
         curRR.percentFieldList = percentFields;
         curRR.noEditFieldList = noEditFields;
         curRR.timeFieldList = timeFields;
+        curRR.picklistFieldList = picklistFields;
+        curRR.picklistFieldMap = picklistFieldLabels;
         curRR.objectLinkField = objectLinkField;
         return curRR;
     }
