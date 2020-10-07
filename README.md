@@ -51,7 +51,7 @@ This configures your org to essentially allow applications to run that call out 
 
 ---
 ## Release Notes
-10/xx/20 -  Eric Smith -    Version 2.46 -  
+10/07/20 -  Eric Smith -    Version 2.46 -  
             Updates:        Added new Output Parameter for the # of Selected Records 
                             (this can be used for conditional visibility on the same screen as the datatable)   
                             New Selected Record Output Parameter - Returns an SObject record if just a single record is selected 
