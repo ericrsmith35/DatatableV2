@@ -96,6 +96,7 @@ export default class DatatableV2 extends LightningElement {
     @track mydata = [];
     @track selectedRows = [];
     @track roundValueLabel;
+    @track showClearButton = false;
 
     // Handle Lookup Field Variables   
     @api lookupId;
@@ -977,14 +978,14 @@ export default class DatatableV2 extends LightningElement {
     handleRowSelection(event) {
         // Only used with row selection
         // Update values to be passed back to the Flow
-        let selectedRows = event.detail.selectedRows;
-        this.updateNumberOfRowsSelected(selectedRows);
+        let currentSelectedRows = event.detail.selectedRows;
+        this.updateNumberOfRowsSelected(currentSelectedRows);
         this.setIsInvalidFlag(false);
         if(this.isRequired && this.numberOfRowsSelected == 0) {
             this.setIsInvalidFlag(true);
         }
         let sdata = [];
-        selectedRows.forEach(srow => {
+        currentSelectedRows.forEach(srow => {
             const selData = this.tableData.find(d => d[this.keyField] == srow[this.keyField]);
             sdata.push(selData);
         });
@@ -998,13 +999,21 @@ export default class DatatableV2 extends LightningElement {
         console.log('outputSelectedRows',this.outputSelectedRows);
     }
 
-    updateNumberOfRowsSelected(selectedRows) {
+    updateNumberOfRowsSelected(currentSelectedRows) {
         // Handle updating output attribute for the number of selected rows
-        this.numberOfRowsSelected = selectedRows.length;
+        this.numberOfRowsSelected = currentSelectedRows.length;
         this.dispatchEvent(new FlowAttributeChangeEvent('numberOfRowsSelected', this.numberOfRowsSelected));
         // Return an SObject Record if just a single row is selected
-        this.outputSelectedRow = (this.numberOfRowsSelected == 1) ? selectedRows[0] : null;
+        this.outputSelectedRow = (this.numberOfRowsSelected == 1) ? currentSelectedRows[0] : null;
         this.dispatchEvent(new FlowAttributeChangeEvent('outputSelectedRow', this.outputSelectedRow));
+        this.showClearButton =  (this.tableData.length == 1 && this.numberOfRowsSelected == 1);
+    }
+
+    handleClearSelection() {
+        this.showClearButton = false;
+        this.selectedRows = [];
+        this.outputSelectedRows = this.selectedRows;
+        this.dispatchEvent(new FlowAttributeChangeEvent('outputSelectedRows', this.outputSelectedRows));
     }
 
     updateColumnSorting(event) {
