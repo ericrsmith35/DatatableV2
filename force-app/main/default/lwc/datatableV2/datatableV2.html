@@ -11,7 +11,7 @@ Additional components packaged with this LWC:
                     Apex Classes:               SObjectController2 
                                                 SObjectController2Test
 
-VERSION:            2.45
+VERSION:            2.46
 
 RELEASE NOTES:      https://github.com/ericrsmith35/DatatableV2/blob/master/README.md
 
@@ -94,27 +94,52 @@ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVE
         </template>
 
         <!-- DATATABLE -->
-        <div style={tableHeight} class={borderClass}>
-            <c-rich-datatable
-                data={mydata}
-                columns={columns}
-                key-field={keyField}
-                sorted-by={sortedBy}
-                sorted-direction={sortedDirection}
-                max-row-selection={maxRowSelection}
-                selected-rows={selectedRows}
-                hide-checkbox-column={hideCheckboxColumn}
-                suppress-bottom-bar={suppressBottomBar}
-                onsort={updateColumnSorting}
-                oncellchange={handleCellChange}
-                onsave={handleSave}
-                oncancel={cancelChanges}
-                onheaderaction={handleHeaderAction}
-                onrowselection={handleRowSelection}
-                onrowaction={handleRowAction}
-                onresize={handleResize}
-            >
-            </c-rich-datatable>
+        <div class={formElementClass}>
+            <label class="slds-form-element__label" for="datatable">
+                <div class="slds-media slds-media_center slds-media_small">
+                    <abbr class="slds-required" title="required">{requiredSymbol}</abbr>
+                    <div class="slds-media__figure">
+                        <template if:true={hasIcon}>
+                            <lightning-icon icon-name="standard:account" alternative-text="Datatable Icon" title="Icon" size="small"></lightning-icon>
+                        </template>
+                    </div>
+                    <div class="slds-media__body">
+                        <lightning-formatted-rich-text value={formattedTableLabel}></lightning-formatted-rich-text>
+                    </div>
+                </div>
+            </label>
+
+            <div style={tableHeight} class={borderClass} id="datatable">
+                <c-rich-datatable
+                    data={mydata}
+                    columns={columns}
+                    key-field={keyField}
+                    sorted-by={sortedBy}
+                    sorted-direction={sortedDirection}
+                    max-row-selection={maxRowSelection}
+                    selected-rows={selectedRows}
+                    hide-checkbox-column={hideCheckboxColumn}
+                    suppress-bottom-bar={suppressBottomBar}
+                    onsort={updateColumnSorting}
+                    oncellchange={handleCellChange}
+                    onsave={handleSave}
+                    oncancel={cancelChanges}
+                    onheaderaction={handleHeaderAction}
+                    onrowselection={handleRowSelection}
+                    onrowaction={handleRowAction}
+                    onresize={handleResize}
+                >
+                </c-rich-datatable>
+                <div if:true={showClearButton} class="slds-m-top_x-small">
+                    <lightning-button variant="brand-outline" label="Clear Selection" icon-name="utility:clear" onclick={handleClearSelection}></lightning-button>
+                </div>
+            </div>
+            <div if:true={isWorking}>
+                <lightning-spinner
+                    alternative-text="Working..." variant="brand">
+                </lightning-spinner>
+            </div>
+
         </div>
 
         <!-- Special parameter display for Configuration Mode -->

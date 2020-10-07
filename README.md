@@ -51,6 +51,19 @@ This configures your org to essentially allow applications to run that call out 
 
 ---
 ## Release Notes
+10/07/20 -  Eric Smith -    Version 2.46 -  
+            Updates:        Added new Output Parameter for the # of Selected Records 
+                            (this can be used for conditional visibility on the same screen as the datatable)   
+                            New Selected Record Output Parameter - Returns an SObject record if just a single record is selected 
+                            New Required? Parameter - Requires the user to select at least 1 row to proceed  
+                            New optional Table Header with Table Icon and Table Label Parameters  
+                            Switched DualListbox to the fbc version  
+                            Added spinners while sorting & filtering data  
+                            Allow case insensitive field API names  
+                            Allow custom field API names w/o the __c suffix  
+            Bug Fixes:      Display Picklist Labels instead of API Names for Picklist and Multipicklist fields  
+                            Added a Clear Selection button for tables with just a single record
+  
 09/22/20 -  Eric Smith -    Version 2.45 -  
             Bug Fix:        Fixed inability to edit some field types (introduced by v2.44)
   

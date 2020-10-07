@@ -280,7 +280,7 @@
         </fields>
         <fields>
             <name>SelectFields</name>
-            <extensionName>c:dualListBox2</extensionName>
+            <extensionName>c:fbc_dualListBox2</extensionName>
             <fieldType>ComponentInstance</fieldType>
             <inputParameters>
                 <name>allOptionsStringFormat</name>
@@ -295,27 +295,21 @@
                 </value>
             </inputParameters>
             <inputParameters>
+                <name>required</name>
+                <value>
+                    <booleanValue>true</booleanValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
                 <name>allOptionsFieldDescriptorList</name>
                 <value>
                     <elementReference>apexColFieldDescriptors</elementReference>
                 </value>
             </inputParameters>
             <inputParameters>
-                <name>min</name>
+                <name>useWhichObjectKeyForSort</name>
                 <value>
-                    <numberValue>1.0</numberValue>
-                </value>
-            </inputParameters>
-            <inputParameters>
-                <name>max</name>
-                <value>
-                    <numberValue>20.0</numberValue>
-                </value>
-            </inputParameters>
-            <inputParameters>
-                <name>size</name>
-                <value>
-                    <numberValue>10.0</numberValue>
+                    <stringValue>label</stringValue>
                 </value>
             </inputParameters>
             <inputParameters>
@@ -337,15 +331,21 @@
                 </value>
             </inputParameters>
             <inputParameters>
-                <name>required</name>
+                <name>min</name>
                 <value>
-                    <booleanValue>true</booleanValue>
+                    <numberValue>1.0</numberValue>
                 </value>
             </inputParameters>
             <inputParameters>
-                <name>useWhichObjectKeyForSort</name>
+                <name>max</name>
                 <value>
-                    <stringValue>label</stringValue>
+                    <numberValue>20.0</numberValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>size</name>
+                <value>
+                    <numberValue>10.0</numberValue>
                 </value>
             </inputParameters>
             <isRequired>true</isRequired>
