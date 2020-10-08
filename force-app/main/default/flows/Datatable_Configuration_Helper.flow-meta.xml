@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionCalls>
-        <name>Get_All_Fields</name>
-        <label>Get All Fields</label>
+        <name>Get_Field_Information_fbc</name>
+        <label>Get Field Information fbc</label>
         <locationX>551</locationX>
-        <locationY>417</locationY>
-        <actionName>GetFieldInformation</actionName>
+        <locationY>423</locationY>
+        <actionName>fbc_GetFieldInformation</actionName>
         <actionType>apex</actionType>
         <connector>
             <targetReference>Select_Fields</targetReference>
@@ -17,7 +17,7 @@
             </value>
         </inputParameters>
         <outputParameters>
-            <assignToReference>apexColFieldDescriptors</assignToReference>
+            <assignToReference>apexColFieldDescriptors_fbc</assignToReference>
             <name>fields</name>
         </outputParameters>
     </actionCalls>
@@ -43,7 +43,7 @@
         <locationX>875</locationX>
         <locationY>473</locationY>
         <defaultConnector>
-            <targetReference>Get_All_Fields</targetReference>
+            <targetReference>Get_Field_Information_fbc</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>NONE</defaultConnectorLabel>
         <rules>
@@ -109,7 +109,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Get_All_Fields</targetReference>
+                <targetReference>Get_Field_Information_fbc</targetReference>
             </connector>
             <label>NO</label>
         </rules>
@@ -301,12 +301,6 @@
                 </value>
             </inputParameters>
             <inputParameters>
-                <name>allOptionsFieldDescriptorList</name>
-                <value>
-                    <elementReference>apexColFieldDescriptors</elementReference>
-                </value>
-            </inputParameters>
-            <inputParameters>
                 <name>useWhichObjectKeyForSort</name>
                 <value>
                     <stringValue>label</stringValue>
@@ -346,6 +340,12 @@
                 <name>size</name>
                 <value>
                     <numberValue>10.0</numberValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>allOptionsFieldDescriptorList</name>
+                <value>
+                    <elementReference>apexColFieldDescriptors_fbc</elementReference>
                 </value>
             </inputParameters>
             <isRequired>true</isRequired>
@@ -486,8 +486,8 @@
 &lt;/Flow&gt;</text>
     </textTemplates>
     <variables>
-        <name>apexColFieldDescriptors</name>
-        <apexClass>FieldDescriptor</apexClass>
+        <name>apexColFieldDescriptors_fbc</name>
+        <apexClass>fbc_FieldDescriptor</apexClass>
         <dataType>Apex</dataType>
         <isCollection>true</isCollection>
         <isInput>false</isInput>

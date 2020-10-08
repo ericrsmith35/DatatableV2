@@ -6,7 +6,6 @@
         <name>Flow</name>
     </types>
     <types>
-        <members>FieldDescriptor</members>
         <members>SObjectController2</members>
         <members>SObjectController2Test</members>
         <name>ApexClass</name>
