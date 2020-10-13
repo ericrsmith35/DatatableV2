@@ -50,6 +50,9 @@ This configures your org to essentially allow applications to run that call out 
 
 ---
 ## Release Notes
+09/22/20 -  Eric Smith -    Version 2.47 -  
+            Bug Fix:        Display correct icon for Table Header (was always showing standard:account icon)
+  
 10/07/20 -  Eric Smith -    Version 2.46 -  
             Updates:        Added new Output Parameter for the # of Selected Records 
                             (this can be used for conditional visibility on the same screen as the datatable)   

@@ -11,7 +11,7 @@ Additional components packaged with this LWC:
                     Apex Classes:               SObjectController2 
                                                 SObjectController2Test
 
-VERSION:            2.46
+VERSION:            2.47
 
 RELEASE NOTES:      https://github.com/ericrsmith35/DatatableV2/blob/master/README.md
 
@@ -100,7 +100,7 @@ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVE
                     <abbr class="slds-required" title="required">{requiredSymbol}</abbr>
                     <div class="slds-media__figure">
                         <template if:true={hasIcon}>
-                            <lightning-icon icon-name="standard:account" alternative-text="Datatable Icon" title="Icon" size="small"></lightning-icon>
+                            <lightning-icon icon-name={tableIcon} alternative-text="Datatable Icon" title="Icon" size="small"></lightning-icon>
                         </template>
                     </div>
                     <div class="slds-media__body">
