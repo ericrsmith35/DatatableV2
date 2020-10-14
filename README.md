@@ -50,7 +50,7 @@ This configures your org to essentially allow applications to run that call out 
 
 ---
 ## Release Notes
-09/22/20 -  Eric Smith -    Version 2.47 -  
+10/14/20 -  Eric Smith -    Version 2.47 -  
             Bug Fix:        Display correct icon for Table Header (was always showing standard:account icon)
   
 10/07/20 -  Eric Smith -    Version 2.46 -  
