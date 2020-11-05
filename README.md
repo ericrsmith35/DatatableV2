@@ -24,7 +24,7 @@ Twitter: https://twitter.com/esmith35
 
 ---
 **You must install these components FIRST in order to use the Datatable Configuration Helper Flow**       
-Flow Base Components (https://unofficialsf.com/introducing-flowbasecomponents/)  
+Flow Base Components 
 Use the original install link here (https://login.salesforce.com/packaging/installPackage.apexp?p0=04tf4000004PuQrAAK)
 
 ---
