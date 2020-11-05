@@ -23,11 +23,6 @@ Blog: https://ericsplayground.wordpress.com/blog/
 Twitter: https://twitter.com/esmith35  
 
 ---
-**To just install datatableV2 without the Configuration helper, use these links: (v2.46)**  
-Production/Developer: https://login.salesforce.com/packaging/installPackage.apexp?p0=04t3t000002kq5V  
-Sandbox: https://test.salesforce.com/packaging/installPackage.apexp?p0=04t3t000002kq5V  
-
----
 **You must install these components FIRST in order to use the Datatable Configuration Helper Flow**     
 Flow Base Components (https://unofficialsf.com/introducing-flowbasecomponents/)  
   
@@ -50,6 +45,9 @@ This configures your org to essentially allow applications to run that call out 
 
 ---
 ## Release Notes
+10/14/20 -  Eric Smith -    Version 2.47 (temp fix)-  
+            Bug Fix:        Removed Config Helper Flows & Fixed MYDOMAIN when url contained --c 
+              
 10/14/20 -  Eric Smith -    Version 2.47 -  
             Bug Fix:        Display correct icon for Table Header (was always showing standard:account icon)
   
