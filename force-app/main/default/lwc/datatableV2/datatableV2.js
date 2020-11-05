@@ -190,6 +190,7 @@ export default class DatatableV2 extends LightningElement {
         const logStyleText = 'color: green; font-size: 16px';
         const logStyleNumber = 'color: red; font-size: 16px';
         console.log("%cdatatableV2 VERSION_NUMBER: %c"+VERSION_NUMBER, logStyleText, logStyleNumber);
+        console.log('MYDOMAIN:',MYDOMAIN);
 
         // JSON input attributes
         if (this.isUserDefinedObject) {
