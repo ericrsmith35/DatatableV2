@@ -63,6 +63,8 @@ export default class DatatableV2 extends LightningElement {
     @api singleRowSelection;
     @api suppressBottomBar = false;
     @api suppressNameFieldLink = false;
+    @api openNameFieldLinkInSameTab = false;
+    @api openLookupFieldLinkInSameTab = false;
     @api tableHeight;
     @api outputSelectedRows = [];
     @api outputSelectedRow;
@@ -803,7 +805,11 @@ export default class DatatableV2 extends LightningElement {
                         lufield = fieldName.replace(/__c$/gi,'__r');
                     }
                     fieldName = lufield + '_lookup';
-                    this.typeAttributes = { label: { fieldName: lufield + '_name' }, target: '_blank' };
+                    var linkTarget = '_blank';
+                    if (this.openLookupFieldLinkInSameTab) {
+                        linkTarget = '_top';
+                    }
+                    this.typeAttributes = { label: { fieldName: lufield + '_name' }, target: linkTarget };
                 } else {
                     this.typeAttrib.type = 'text';      // Non reparentable Master-Detail fields are not supported
                 }
@@ -813,7 +819,11 @@ export default class DatatableV2 extends LightningElement {
             if (fieldName == this.objectLinkField && !this.suppressNameFieldLink) {
                 this.typeAttrib.type = 'url';
                 fieldName = fieldName + '_lookup';
-                this.typeAttributes = { label: { fieldName: this.objectLinkField }, target: '_blank' };
+                var linkTarget = '_blank';
+                if (this.openNameFieldLinkInSameTab) {
+                    linkTarget = '_top';
+                }
+                this.typeAttributes = { label: { fieldName: this.objectLinkField }, target: linkTarget };
                 this.cellAttributes.wrapText = true;
             }
 
