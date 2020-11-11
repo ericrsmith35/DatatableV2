@@ -58,6 +58,7 @@ public with sharing class SObjectController2 {
         Map<String, String> objNameFieldMap;
         Map<String, Map<String,String>> picklistFieldMap;   // Field API Name, <Picklist Value, Picklist Label>
         List<String> percentFieldList;
+        List<String> numberFieldList;
         List<String> noEditFieldList;
         list<String> timeFieldList;
         list<String> picklistFieldList;
@@ -78,6 +79,7 @@ public with sharing class SObjectController2 {
             curRR.lookupFieldData = '{}';
             curRR.lookupFieldList = emptyList;
             curRR.percentFieldList = emptyList;
+            curRR.numberFieldList = emptyList;
             curRR.noEditFieldList = emptyList;
             curRR.timeFieldList = emptyList;
             curRR.picklistFieldList = emptyList;
@@ -88,7 +90,7 @@ public with sharing class SObjectController2 {
             String objName = records[0].getSObjectType().getDescribe().getName();
             curRR = getColumnData(curRR, fieldNames, objName);
             curRR = getLookupData(curRR, records, curRR.lookupFieldList, objName);
-            curRR = getRowData(curRR, records, curRR.dataMap, curRR.objNameFieldMap, curRR.lookupFieldList, curRR.percentFieldList, objName, curRR.noEditFieldList);
+            curRR = getRowData(curRR, records, curRR.dataMap, curRR.objNameFieldMap, curRR.lookupFieldList, curRR.percentFieldList, curRR.numberFieldList, objName, curRR.noEditFieldList);
             curRR.objectName = objName;
         }
         curRR.timezoneOffset = getTimezoneOffset().format();
@@ -111,6 +113,7 @@ public with sharing class SObjectController2 {
         String lookupFieldData = '';
         List<String> lookupFields = new List<String>();
         List<String> percentFields = new List<String>();
+        List<String> numberFields = new List<String>();
         List<String> noEditFields = new List<String>();
         List<String> timeFields = new List<String>();
         List<String> picklistFields = new List<String>();
@@ -162,6 +165,7 @@ public with sharing class SObjectController2 {
                     }
                 }
                 when 'CURRENCY', 'DECIMAL', 'DOUBLE', 'INTEGER', 'LONG' {
+                    numberFields.add(fieldName);
                     // *** create scale attrib in datatableColumnFieldDescriptor and pass the getScale() values in that way. ***
                 }
                 when 'TIME' {
@@ -188,6 +192,7 @@ public with sharing class SObjectController2 {
         curRR.lookupFieldData = lookupFieldData;
         curRR.lookupFieldList = lookupFields;
         curRR.percentFieldList = percentFields;
+        curRR.numberFieldList = numberFields;
         curRR.noEditFieldList = noEditFields;
         curRR.timeFieldList = timeFields;
         curRR.picklistFieldList = picklistFields;
@@ -236,7 +241,7 @@ public with sharing class SObjectController2 {
     }
 
     @AuraEnabled
-    public static ReturnResults getRowData(ReturnResults curRR, List<SObject> records, Map<String, Map<Id, SObject>> dataMap, Map<String, String> objNameFieldMap, List<String> lookupFields, List<String> percentFields, String objName, List<String> noEditFields) {
+    public static ReturnResults getRowData(ReturnResults curRR, List<SObject> records, Map<String, Map<Id, SObject>> dataMap, Map<String, String> objNameFieldMap, List<String> lookupFields, List<String> percentFields, List<String> numberFields, String objName, List<String> noEditFields) {
         // Update object to include values for the "Name" field referenced by Lookup fields
         String lookupFieldData = '';
         Map<String,Boolean> firstRecord = new Map<String,Boolean>();
