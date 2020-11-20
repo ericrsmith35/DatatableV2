@@ -573,7 +573,6 @@ export default class DatatableV2 extends LightningElement {
         data.forEach(record => {
 
             numberFields.forEach(nb => {
-                console.log('Type:' + typeof(record[nb]) + ' - NB:' + nb + ' - record NB:' + record[nb]);
                 record[nb] = parseFloat(record[nb]);
             })
 
@@ -589,7 +588,8 @@ export default class DatatableV2 extends LightningElement {
 
             // Store percent field data as value/100
             percentFields.forEach(pct => {
-                record[pct] = record[pct]/100;
+                record[pct] = parseFloat(record[pct]);
+                console.log('PCT:' + typeof(record[pct]) + ' - NB:' + pct + ' - record NB:' + record[pct]);
             });
 
             // Flatten returned data
@@ -984,6 +984,11 @@ export default class DatatableV2 extends LightningElement {
                 let numberFields = this.numberFieldArray;
                 numberFields.forEach(nb => {
                     field[nb] = parseFloat(field[nb]);
+                });
+                let pctfield = this.percentFieldArray;
+                pctfield.forEach(pct => {
+                    console.log('PCTCPCTCPCZC', field[pct]);
+                    field[pct] = parseFloat(field[pct]);
                 });
 
                 this.outputEditedRows = [...this.outputEditedRows,eitem];     // Add to output attribute collection
