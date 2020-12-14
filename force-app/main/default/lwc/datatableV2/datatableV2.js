@@ -807,7 +807,7 @@ export default class DatatableV2 extends LightningElement {
                     fieldName = lufield + '_lookup';
                     var linkTarget = '_blank';
                     if (this.openLookupFieldLinkInSameTab) {
-                        linkTarget = '_top';
+                        linkTarget = '_self';
                     }
                     this.typeAttributes = { label: { fieldName: lufield + '_name' }, target: linkTarget };
                 } else {
@@ -821,7 +821,7 @@ export default class DatatableV2 extends LightningElement {
                 fieldName = fieldName + '_lookup';
                 var linkTarget = '_blank';
                 if (this.openNameFieldLinkInSameTab) {
-                    linkTarget = '_top';
+                    linkTarget = '_self';
                 }
                 this.typeAttributes = { label: { fieldName: this.objectLinkField }, target: linkTarget };
                 this.cellAttributes.wrapText = true;
