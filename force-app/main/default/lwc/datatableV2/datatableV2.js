@@ -1006,13 +1006,14 @@ export default class DatatableV2 extends LightningElement {
         // Return an SObject Record if just a single row is selected
         this.outputSelectedRow = (this.numberOfRowsSelected == 1) ? currentSelectedRows[0] : null;
         this.dispatchEvent(new FlowAttributeChangeEvent('outputSelectedRow', this.outputSelectedRow));
-        this.showClearButton =  (this.tableData.length == 1 && this.numberOfRowsSelected == 1);
+        this.showClearButton = this.numberOfRowsSelected > 0;
     }
 
     handleClearSelection() {
         this.showClearButton = false;
         this.selectedRows = [];
         this.outputSelectedRows = this.selectedRows;
+        this.numberOfRowsSelected = 0;
         this.dispatchEvent(new FlowAttributeChangeEvent('outputSelectedRows', this.outputSelectedRows));
     }
 
