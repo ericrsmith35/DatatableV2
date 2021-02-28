@@ -2,6 +2,11 @@
 
 Lightning Web Component for Flow Screens:       **datatableV2**
 
+# The most recent source code can now be found here:
+https://github.com/alexed1/LightningFlowComponents/tree/master/flow_screen_components/datatable 
+
+---
+
 **This component allows the user to configure and display a datatable in a Flow screen.**
 
 Additional components packaged with this LWC:
