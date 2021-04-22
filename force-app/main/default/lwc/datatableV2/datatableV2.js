@@ -129,6 +129,7 @@ export default class DatatableV2 extends LightningElement {
     @api lookupFieldArray = [];
     @api columnArray = [];
     @api percentFieldArray = [];
+    @api numberFieldArray = [];
     @api noEditFieldArray = [];
     @api timeFieldArray = [];
     @api picklistFieldArray = [];
@@ -183,6 +184,8 @@ export default class DatatableV2 extends LightningElement {
 
     connectedCallback() {
 
+        console.log('outputSelectedRows: ', this.outputSelectedRows);
+
         console.log("VERSION_NUMBER", VERSION_NUMBER);
 
         // JSON input attributes
@@ -199,6 +202,7 @@ export default class DatatableV2 extends LightningElement {
             this.preSelectedRows = (this.preSelectedRowsString.length > 0) ? JSON.parse(this.preSelectedRowsString) : [];  
         }
 
+        
         // Restrict the number of records handled by this component
         let min = Math.min(MAXROWCOUNT, this.maxNumberOfRows);
         if (this.tableData.length > min) {
@@ -207,6 +211,8 @@ export default class DatatableV2 extends LightningElement {
 
         // Set roundValue for setting Column Widths in Config Mode
         this.roundValueLabel = "Round to Nearest " + ROUNDWIDTH;
+
+
 
         // Get array of column field API names
         this.columnArray = (this.columnFields.length > 0) ? this.columnFields.replace(/\s/g, '').split(',') : [];
@@ -224,6 +230,7 @@ export default class DatatableV2 extends LightningElement {
                 });
             })
         }
+
 
         // Parse Column Alignment attribute
         const parseAlignments = (this.columnAlignments.length > 0) ? this.columnAlignments.replace(/\s/g, '').split(',') : [];
@@ -277,6 +284,7 @@ export default class DatatableV2 extends LightningElement {
             this.filterAttribType = 'all';
         }
 
+
         // Parse Column Icon attribute
         const parseIcons = (this.columnIcons.length > 0) ? this.columnIcons.replace(/\s/g, '').split(',') : [];
         this.attribCount = (parseIcons.findIndex(f => f.search(':') != -1) != -1) ? 0 : 1;
@@ -296,6 +304,7 @@ export default class DatatableV2 extends LightningElement {
                 label: this.columnValue(label)
             });
         });
+
 
         if (this.isUserDefinedObject) {
 
@@ -323,6 +332,7 @@ export default class DatatableV2 extends LightningElement {
             });
         }
 
+
         // Parse Column Width attribute
         const parseWidths = (this.columnWidths.length > 0) ? this.columnWidths.replace(/\s/g, '').split(',') : [];
         this.attribCount = (parseWidths.findIndex(f => f.search(':') != -1) != -1) ? 0 : 1;
@@ -343,6 +353,7 @@ export default class DatatableV2 extends LightningElement {
             });
         });
 
+
         // Parse Column Other Attributes attribute (Because multiple attributes use , these are separated by ;)
         const parseOtherAttribs = (this.columnOtherAttribs.length > 0) ? this.removeSpaces(this.columnOtherAttribs).split(';') : [];
         this.attribCount = 0;   // These attributes must specify a column number or field API name
@@ -362,6 +373,7 @@ export default class DatatableV2 extends LightningElement {
                 attribute: this.columnValue(ta)
             });
         });
+
 
         // Set table height
         this.tableHeight = 'height:' + this.tableHeight;
@@ -444,7 +456,11 @@ export default class DatatableV2 extends LightningElement {
                     case 'percent':
                         this.percentFieldArray.push(this.basicColumns[t.column].fieldName);
                         this.basicColumns[t.column].type = 'percent';
-                        break;
+                        break;                    
+                    case 'number':
+                        this.numberFieldArray.push(this.basicColumns[t.column].fieldName);
+                        this.basicColumns[t.column].type = 'number';
+                        break;                    
                     case 'time':
                         this.timeFieldArray.push(this.basicColumns[t.column].fieldName);
                         this.basicColumns[t.column].type = 'time';
@@ -457,7 +473,9 @@ export default class DatatableV2 extends LightningElement {
                     case 'richtext':
                         this.lookupFieldArray.push(this.basicColumns[t.column].fieldName);
                         this.lookups.push(this.basicColumns[t.column].fieldName); 
-                        this.basicColumns[t.column].type = 'richtext';         
+                        this.basicColumns[t.column].type = 'richtext';    
+                    break;     
+
                 }
             });
 
@@ -488,6 +506,7 @@ export default class DatatableV2 extends LightningElement {
                 // Assign return results from the Apex callout
                 this.recordData = [...returnResults.rowData];
                 this.lookups = returnResults.lookupFieldList;
+                this.numberFieldArray = (returnResults.numberFieldList.length > 0) ? returnResults.numberFieldList.toString().split(',') : [];
                 this.percentFieldArray = (returnResults.percentFieldList.length > 0) ? returnResults.percentFieldList.toString().split(',') : [];
                 this.timeFieldArray = (returnResults.timeFieldList.length > 0) ? returnResults.timeFieldList.toString().split(',') : [];
                 this.picklistFieldArray = (returnResults.picklistFieldList.length > 0) ? returnResults.picklistFieldList.toString().split(',') : [];
@@ -496,6 +515,7 @@ export default class DatatableV2 extends LightningElement {
                 this.objectName = returnResults.objectName;
                 this.objectLinkField = returnResults.objectLinkField;
                 this.lookupFieldArray = JSON.parse('[' + returnResults.lookupFieldData + ']');
+
                 this.timezoneOffset = returnResults.timezoneOffset.replace(/,/g, '');
 
                 // Check for differences in picklist API Values vs Labels
@@ -545,11 +565,16 @@ export default class DatatableV2 extends LightningElement {
         let lookupFields = this.lookups;
         let lufield = '';
         let timeFields = this.timeFieldArray;
+        let numberFields = this.numberFieldArray;
         let percentFields = this.percentFieldArray;
         let picklistFields = this.picklistFieldArray;
         let lookupFieldObject = '';
 
         data.forEach(record => {
+
+            numberFields.forEach(nb => {
+                record[nb] = parseFloat(record[nb]);
+            })
 
             // Prepend a date to the Time field so it can be displayed and calculate offset based on User's timezone
             timeFields.forEach(time => {
@@ -563,7 +588,8 @@ export default class DatatableV2 extends LightningElement {
 
             // Store percent field data as value/100
             percentFields.forEach(pct => {
-                record[pct] = record[pct]/100;
+                record[pct] = parseFloat(record[pct]);
+                console.log('PCT:' + typeof(record[pct]) + ' - NB:' + pct + ' - record NB:' + record[pct]);
             });
 
             // Flatten returned data
@@ -952,6 +978,19 @@ export default class DatatableV2 extends LightningElement {
                     });
                     this.outputEditedRows = [...otherEditedRows];
                 } 
+
+                // Correct the data formatting, so that decimal numbers are recognized no matter the Country-related decimal-format 
+                let field = eitem
+                let numberFields = this.numberFieldArray;
+                numberFields.forEach(nb => {
+                    field[nb] = parseFloat(field[nb]);
+                });
+                let pctfield = this.percentFieldArray;
+                pctfield.forEach(pct => {
+                    console.log('PCTCPCTCPCZC', field[pct]);
+                    field[pct] = parseFloat(field[pct]);
+                });
+
                 this.outputEditedRows = [...this.outputEditedRows,eitem];     // Add to output attribute collection
                 if (this.isUserDefinedObject) {
                     this.outputEditedRowsString = JSON.stringify(this.outputEditedRows);                                        //JSON Version
@@ -1189,6 +1228,8 @@ export default class DatatableV2 extends LightningElement {
             case 'percent':
                 // return 'percent-fixed';  // This would be to enter 35 to get 35% (0.35)
                 return 'percent';
+            case 'number':
+                return 'number';
             default:
                 return null;
         }
