@@ -1,4 +1,4 @@
-# DatatableV2
+# DatatableV2 (Obsolete)
 
 Lightning Web Component for Flow Screens:       **datatableV2**
 
